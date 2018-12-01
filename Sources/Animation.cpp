@@ -18,6 +18,9 @@ void Animation::init(const char* textureName, int animTiles, AnimationTyp typ) {
 	height = texture->height;
 	this->animTiles = animTiles;
 	this->typ = typ;
+	this->status = Animation::Status::StandingRight;
+	this->animIndex = 0;
+	this->frameCount = 0;
 }
 
 void Animation::update() {

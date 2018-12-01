@@ -77,7 +77,7 @@ namespace {
 			drawTiles(g2, camX, camY);
 			
 			cat->render(g2, playerPosition.x(), playerPosition.y());
-			guy->render(g2, guyPosition.x(), guyPosition.y());
+			//guy->render(g2, guyPosition.x(), guyPosition.y());
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
