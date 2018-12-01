@@ -83,7 +83,7 @@ namespace {
 			drawTiles(g2, camX, camY);
 			
 			cat->render(g2);
-			guy->render(g2);
+			//guy->render(g2);
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
@@ -152,7 +152,7 @@ int kore(int argc, char** argv) {
 	
 	playerPosition = vec2(0, 0);
 	cat = new Animation();
-	cat->init("Tiles/cat_skel_anim.png", 4, Animation::AnimationTyp::Walking);
+	cat->init("Tiles/cat_walking_anim.png", 4, Animation::AnimationTyp::Walking);
 	
 	guyPosition = vec2(0, 0);
 	guy = new Animation();
