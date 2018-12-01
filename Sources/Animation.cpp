@@ -26,10 +26,10 @@ void Animation::init(const char* textureName, int animTiles, AnimationTyp typ) {
 
 void Animation::update(Kore::vec2 newPosition) {
 	++frameCount;
-	if (frameCount > 10) {
+	if (frameCount > 40) {
 		frameCount = 0;
 		
-		animIndex = animIndex % animTiles;
+		animIndex = animIndex % (animTiles-1);
 		++animIndex;
 	}
 	
