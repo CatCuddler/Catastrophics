@@ -48,7 +48,7 @@ namespace {
 			playerPosition = vec2(playerPosition.x(), playerPosition.y() += moveDistance);
 		}
 		
-		cat->update();
+		cat->update(playerPosition);
 		//Kore::log(Kore::LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 	}
 	
@@ -56,7 +56,7 @@ namespace {
 		// TODO: guy should follow the cat
 		guyPosition = playerPosition;
 		
-		guy->update();
+		guy->update(guyPosition);
 	}
 
 	void update() {
@@ -76,8 +76,8 @@ namespace {
 			camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
 			
-			cat->render(g2, playerPosition.x(), playerPosition.y());
-			//guy->render(g2, guyPosition.x(), guyPosition.y());
+			cat->render(g2);
+			guy->render(g2);
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
@@ -150,7 +150,7 @@ int kore(int argc, char** argv) {
 	
 	guyPosition = vec2(0, 0);
 	guy = new Animation();
-	guy->init("Tiles/player.png", 10, Animation::AnimationTyp::Walking);
+	guy->init("Tiles/player.png", 9, Animation::AnimationTyp::Walking);
 	
 	g2 = new Graphics2::Graphics2(w, h, false);
 	

@@ -11,17 +11,18 @@ public:
 	
 	Animation();
 	void init(const char* textureName, int animTiles, AnimationTyp typ);
-	void update();
-	void render(Kore::Graphics2::Graphics2* g2, float posX, float posY);
+	void update(Kore::vec2 position);
+	void render(Kore::Graphics2::Graphics2* g2);
 	void changeFloor();
 	
 	float x, y;
 	AnimationTyp typ;
 	
 private:
-	int anim;
 	int animIndex;
 	int animTiles;
+	
+	Kore::vec2 position;
 	
 	Kore::Graphics4::Texture* texture;
 	int width, height;
