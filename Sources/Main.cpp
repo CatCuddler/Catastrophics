@@ -47,9 +47,15 @@ namespace {
 		} else if (down && playerPosition.y() <= rows * tileHeight - h - moveDistance) {
 			playerPosition = vec2(playerPosition.x(), playerPosition.y() += moveDistance);
 		}
+		//log(LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 		
 		cat->update(playerPosition);
-		//Kore::log(Kore::LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
+		
+		int tileID = getTileID(playerPosition.x(), playerPosition.y());
+		//log(LogLevel::Info, "%i", tileID);
+		if (tileID >= Stairs1 && tileID <= Stairs4) {
+			log(LogLevel::Info, "stairs");
+		}
 	}
 	
 	void moveGuy() {

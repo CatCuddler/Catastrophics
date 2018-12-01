@@ -62,7 +62,7 @@ void Animation::render(Kore::Graphics2::Graphics2* g2) {
 			break;
 		}
 		case StandingLeft:
-			g2->drawScaledSubImage(texture, 0, 0, -width, height, px - position.x(), py - position.y(), width, height);
+			g2->drawScaledSubImage(texture, width, 0, -width, height, px - position.x(), py - position.y(), width, height);
 			//log(LogLevel::Info, "Standing left");
 			break;
 		case WalkingLeft: {
