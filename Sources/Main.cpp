@@ -33,9 +33,9 @@ namespace {
 		} else if (right) {
 			playerPosition = vec2(playerPosition.x() += moveSpeed, playerPosition.y());
 		} else if (up) {
-			playerPosition = vec2(playerPosition.x(), playerPosition.y() += moveSpeed);
-		} else if (down) {
 			playerPosition = vec2(playerPosition.x(), playerPosition.y() -= moveSpeed);
+		} else if (down) {
+			playerPosition = vec2(playerPosition.x(), playerPosition.y() += moveSpeed);
 		}
 	}
 
@@ -50,7 +50,6 @@ namespace {
 		
 		camX = playerPosition.x();
 		camY = playerPosition.y();
-		Kore::log(Kore::LogLevel::Info, "%f %f", camX, camX);
 		drawTiles(g2, camX, camY);
 		
 		g2->end();
