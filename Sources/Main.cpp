@@ -26,6 +26,11 @@ namespace {
 	int lastDirection = 1;	// 0 - left, 1 - right
 	bool left, right, up, down;
 	
+	enum GameState {
+		TitleState, InGameState, GameOverState
+	};
+	GameState state;
+	
 	void movePlayer() {
 		float moveDistance = 4;
 		
@@ -51,9 +56,16 @@ namespace {
 		g2->begin(true, w, h);
 		//g2->drawImage(cat, 0, 0);
 		
-		camX = playerPosition.x();
-		camY = playerPosition.y();
-		drawTiles(g2, camX, camY);
+		if (state == TitleState) {
+			log(LogLevel::Info, "Add title screen");
+		} else if (state == InGameState) {
+			camX = playerPosition.x();
+			camY = playerPosition.y();
+			drawTiles(g2, camX, camY);
+		} else if (state == GameOverState) {
+			log(LogLevel::Info, "Add game over screen");
+			//g2->drawImage(gameOverImage, 0, 0);
+		}
 		
 		g2->end();
 
@@ -125,6 +137,8 @@ int kore(int argc, char** argv) {
 	right = false;
 	up = false;
 	down = false;
+	
+	state = InGameState;
 	
 	Keyboard::the()->KeyDown = keyDown;
 	Keyboard::the()->KeyUp = keyUp;
