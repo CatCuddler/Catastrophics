@@ -49,11 +49,12 @@ namespace {
 
 	void update() {
 		Graphics4::begin();
+		Graphics4::restoreRenderTarget();
 		Graphics4::clear(Graphics4::ClearColorFlag);
 		
 		movePlayer();
 
-		g2->begin(true, w, h);
+		g2->begin(false, w, h);
 		//g2->drawImage(cat, 0, 0);
 		
 		if (state == TitleState) {
