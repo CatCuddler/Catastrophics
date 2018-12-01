@@ -106,8 +106,6 @@ void resetSpiders()
 }
 
 void drawTiles(Graphics2::Graphics2* g2, float camX, float camY) {
-	int lightIndex = 0;
-
 	const int sourceColumns = image->texWidth / tileWidth;
 	const int sourceRows = image->texHeight / tileHeight;
 	
@@ -115,16 +113,10 @@ void drawTiles(Graphics2::Graphics2* g2, float camX, float camY) {
 		for (int x = 0; x < columns; ++x) {
 			int index = source[y * columns + x];
 
-			if (index == TableAndLamp) {
-				//lights[lightIndex] = vec2(x * tileWidth - camX + tileWidth - 40, y * tileHeight - camY + 60);
-				++lightIndex;
-			}
-			
 			int row    = (int)(index / sourceColumns);
 			int column = index % sourceColumns;
 			
-			//Graphics4::Texture* tile = new Graphics4::Texture();
-			g2->drawScaledSubImage(image, column * tileWidth, row * tileHeight , tileWidth, tileHeight, x * tileWidth - camX, y * tileHeight - camY, tileWidth, tileHeight);
+			g2->drawScaledSubImage(image, column * tileWidth, row * tileHeight, tileWidth, tileHeight, x * tileWidth - camX, y * tileHeight - camY, tileWidth, tileHeight);
 		}
 	}
 }

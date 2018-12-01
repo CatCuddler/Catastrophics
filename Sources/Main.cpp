@@ -11,8 +11,9 @@
 using namespace Kore;
 
 namespace {
-	const int w = 1280 / 2;
-	const int h = 720 / 2;
+	const int scale = 4;
+	const int w = 128 * 2;
+	const int h = 168;
 	
 	float camX = 0;
 	float camY = 0;
@@ -26,17 +27,19 @@ namespace {
 	bool left, right, up, down;
 	
 	void movePlayer() {
-		float moveSpeed = 4;
+		float moveDistance = 4;
 		
-		if (left) {
-			playerPosition = vec2(playerPosition.x() -= moveSpeed, playerPosition.y());
-		} else if (right) {
-			playerPosition = vec2(playerPosition.x() += moveSpeed, playerPosition.y());
-		} else if (up) {
-			playerPosition = vec2(playerPosition.x(), playerPosition.y() -= moveSpeed);
-		} else if (down) {
-			playerPosition = vec2(playerPosition.x(), playerPosition.y() += moveSpeed);
+		if (left && playerPosition.x() >= moveDistance) {
+			playerPosition = vec2(playerPosition.x() -= moveDistance, playerPosition.y());
+		} else if (right && playerPosition.x() <= columns * tileWidth - w - moveDistance) {
+			playerPosition = vec2(playerPosition.x() += moveDistance, playerPosition.y());
+		} else if (up && playerPosition.y() >= moveDistance) {
+			playerPosition = vec2(playerPosition.x(), playerPosition.y() -= moveDistance);
+		} else if (down && playerPosition.y() <= rows * tileHeight - h - moveDistance) {
+			playerPosition = vec2(playerPosition.x(), playerPosition.y() += moveDistance);
 		}
+		
+		//Kore::log(Kore::LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 	}
 
 	void update() {
@@ -108,7 +111,7 @@ namespace {
 }
 
 int kore(int argc, char** argv) {
-	Kore::System::init("LudumDare43", w * 2, h * 2);
+	Kore::System::init("LudumDare43", w * scale, h * scale);
 	Kore::System::setCallback(update);
 	
 	initTiles("Tiles/school.csv", "Tiles/school.png");
