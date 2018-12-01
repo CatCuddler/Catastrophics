@@ -23,6 +23,13 @@ namespace {
 	Graphics4::Texture* cat;
 	vec2 playerPosition;
 	
+	Graphics4::Texture* guy;
+	float guyWidth;
+	float guyHeight;
+	vec2 guyPosition;
+	int guyFrameCount;
+	int guyRunIndex;
+	
 	int lastDirection = 1;	// 0 - left, 1 - right
 	bool left, right, up, down;
 	
@@ -46,6 +53,28 @@ namespace {
 		
 		//Kore::log(Kore::LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 	}
+	
+	void moveGuy() {
+		++guyFrameCount;
+		if (guyFrameCount > 10) {
+			guyFrameCount = 0;
+			
+			guyRunIndex = guyRunIndex % 8;
+			++guyRunIndex;
+		}
+		
+		float px = playerPosition.x();
+		float py = tileHeight - guyHeight;
+		// Render guy --> guy should follow the cat
+		if (left)
+			g2->drawScaledSubImage(guy, (guyRunIndex + 1) * guyWidth, 0, -guyWidth, guyHeight, px - camX, py - camY, guyWidth, guyHeight);
+		else if (right)
+			g2->drawScaledSubImage(guy, guyRunIndex * guyWidth, 0, guyWidth, guyHeight, px - camX, py - camY, guyWidth, guyHeight);
+		else if (lastDirection == 0)
+			g2->drawScaledSubImage(guy, guyWidth, 0, -guyWidth, guyHeight, px - camX, py - camY, guyWidth, guyHeight);
+		else if (lastDirection == 1)
+			g2->drawScaledSubImage(guy, 0, 0, guyWidth, guyHeight, px - camX, py - camY, guyWidth, guyHeight);
+	}
 
 	void update() {
 		Graphics4::begin();
@@ -63,6 +92,7 @@ namespace {
 			camX = playerPosition.x();
 			camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
+			moveGuy();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
@@ -131,6 +161,12 @@ int kore(int argc, char** argv) {
 	
 	playerPosition = vec2(0, 0);
 	//cat = new Graphics4::Texture("cat.png");
+	
+	guy = new Graphics4::Texture("Tiles/player.png");
+	guyWidth = guy->width / 10.0f;
+	guyHeight = guy->height;
+	guyPosition = vec2(0, 0);
+	guyFrameCount = 0;
 	
 	g2 = new Graphics2::Graphics2(w, h, false);
 	
