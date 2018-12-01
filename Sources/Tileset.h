@@ -20,8 +20,8 @@ namespace {
 	int spiderCooldownCurr[spiderCountMax];
 	int spiderCountCurr;
 	
-	const int rows = 5;
-	const int columns = 24;
+	const int rows = 3;
+	const int columns = 6;
 	
 	int* source;
 

@@ -126,7 +126,7 @@ int kore(int argc, char** argv) {
 	Kore::System::init("LudumDare43", w * scale, h * scale);
 	Kore::System::setCallback(update);
 	
-	initTiles("Tiles/school.csv", "Tiles/school.png");
+	initTiles("Tiles/tiles.csv", "Tiles/tiles.png");
 	
 	playerPosition = vec2(0, 0);
 	//cat = new Graphics4::Texture("cat.png");

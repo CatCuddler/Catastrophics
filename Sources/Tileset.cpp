@@ -46,7 +46,6 @@ void loadCsv(const char* csvFile) {
 
 	doorCount = 0;
 	spiderCountCurr = 0;
-	int expectedDoorCount = (rows - 1) * 2; // Two for each floor other than the first and second to last
 	doors = new vec2[(rows - 1) * 2];
 	for (int y = 0; y < rows; ++y) {
 		for (int x = 0; x < columns; ++x) {
@@ -64,7 +63,6 @@ void loadCsv(const char* csvFile) {
 			}
 		}
 	}
-	assert(doorCount == expectedDoorCount);
 	shuffleDoors();
 }
 
