@@ -26,7 +26,6 @@ namespace {
 	
 	Animation* cat;
 	vec2 playerCenter;
-	bool moveDownLeft;
 	float playerWidth, playerHeight;
 	
 	float targetYPosition;
@@ -51,9 +50,51 @@ namespace {
 	};
 	GameState state;
 	
+	int x0 = 0;
+	int y0 = 0;
+	int x1 = 100;
+	int y1 = 100;
+	
+	void drawline(int x0, int y0, int x1, int y1) {
+		int dx, dy, p, x, y;
+		
+		dx = x1-x0;
+		dy = y1-y0;
+		
+		x = x0;
+		y = y0;
+		
+		p = 2 * dy - dx;
+		
+		//g2 ->setColor(Graphics2::Color::Red);
+		while (x < x1) {
+			if(p >= 0) {
+				//putpixel(x,y,7);
+				//g2->drawRect(x, y, 5, 5);
+				px = x;
+				py = y;
+				y = y + 1;
+				p = p + 2 * dy - 2 * dx;
+			} else {
+				//putpixel(x,y,7);
+				//g2->drawRect(x, y, 5, 5);
+				px = x;
+				py = y;
+				p = p + 2 * dy;
+			}
+			x = x + 1;
+		}
+	}
+	
+	void moveCatInTheMiddleOfTheTile() {
+		vec2 tileCenter = getTileCenterBottom(playerCenter.x(), playerCenter.y());
+		px = tileCenter.x() - playerWidth / 2;
+		py = tileCenter.y() - playerHeight;
+	}
+	
 	void moveCat() {
 		int tileID = getTileID(playerCenter.x(), playerCenter.y());
-		//log(LogLevel::Info, "%i", tileID);
+		//log(LogLevel::Info, "%f %f", tileCenter.x(), tileCenter.y());
 		
 		helpText = nullptr;
 		if (tileID == Stairs3) {
@@ -75,33 +116,59 @@ namespace {
 		
 		float moveDistance = 4;
 		
-		if (!moveDownLeft) {
+		if (cat->status != Animation::Status::WalkingDownLeft || cat->status != Animation::Status::WalkingDownRight ||
+			cat->status != Animation::Status::WalkingUpLeft || cat->status != Animation::Status::WalkingUpRight) {
 			if (left && px >= -10) {
 				px -= moveDistance;
+				cat->status = Animation::Status::WalkingLeft;
 			} else if (right && px <= columns * tileWidth - playerWidth + 10) {
 				px += moveDistance;
+				cat->status = Animation::Status::WalkingRight;
 			} else if (up && py >= tileHeight - playerHeight + moveDistance) {
-				if (tileID >= Stairs1 && tileID <= Stairs3) {
-					log(LogLevel::Info, "walk upstairs -> right");
-					py -= moveDistance;
+				if (tileID == Stairs1) {
+					moveCatInTheMiddleOfTheTile();
+					targetYPosition = py - tileHeight;
+					cat->status = Animation::Status::WalkingUpRight;
+				}
+				if (tileID >= Stairs6) {
+					moveCatInTheMiddleOfTheTile();
+					targetYPosition = py - tileHeight;
+					cat->status = Animation::Status::WalkingUpLeft;
 				}
 			} else if (down && py <= rows * tileHeight - playerHeight) {
 				if (tileID == Stairs3) {
+					moveCatInTheMiddleOfTheTile();
 					targetYPosition = py + tileHeight;
-					moveDownLeft = true;
+					cat->status = Animation::Status::WalkingDownLeft;
+				}
+				if (tileID == Stairs4) {
+					moveCatInTheMiddleOfTheTile();
+					targetYPosition = py + tileHeight;
+					cat->status = Animation::Status::WalkingDownRight;
 				}
 			}
 		}
 		//log(LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 		
-		if (moveDownLeft) {
-			if (py == targetYPosition) {
-				moveDownLeft = false;
-				px -= moveDistance;
-			} else {
-				px -= moveDistance;
-				py += moveDistance;
-			}
+		if (cat->status == Animation::Status::WalkingDownLeft) {
+			px -= moveDistance;
+			py += moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingLeft;
+		}
+		if (cat->status == Animation::Status::WalkingUpRight) {
+			px += moveDistance;
+			py -= moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingRight;
+		}
+		if (cat->status == Animation::Status::WalkingDownRight) {
+			px += moveDistance;
+			py += moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingRight;
+		}
+		if (cat->status == Animation::Status::WalkingUpLeft) {
+			px -= moveDistance;
+			py -= moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingLeft;
 		}
 		
 		playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
@@ -149,7 +216,7 @@ namespace {
 		}
 		
 		moveCat();
-		moveGuy();
+		//moveGuy();
 
 		g2->begin(false, w, h);
 		
@@ -239,7 +306,6 @@ int kore(int argc, char** argv) {
 	px = 0;
 	py = tileHeight - playerHeight;
 	playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
-	moveDownLeft = false;
 	
 	guyPosition = vec2(0, 0);
 	guy = new Animation();

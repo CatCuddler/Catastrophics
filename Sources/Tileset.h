@@ -38,6 +38,7 @@ void shuffleDoors();
 int getFloor(float py);
 int getTileID(float px, float py);
 int getTileIndex(float px, float py);
+vec2 getTileCenterBottom(float px, float py);
 vec2 findDoor(float lastX, float lastY);
 
 void resetSpiders();

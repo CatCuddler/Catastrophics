@@ -9,6 +9,10 @@ public:
 		Sitting, Walking
 	} animationTyp;
 	
+	enum Status {
+		WalkingLeft, WalkingRight, StandingLeft, StandingRight, WalkingDownRight, WalkingUpRight, WalkingDownLeft, WalkingUpLeft
+	} status;
+	
 	Animation();
 	void init(const char* textureName, int animTiles, AnimationTyp typ);
 	void update(Kore::vec2 position);
@@ -32,8 +36,6 @@ private:
 	int frameCount;
 	int directionLock;
 	
-	enum Status {
-		WalkingLeft, WalkingRight, StandingLeft, StandingRight, WalkingDownRight, WalkingUpRight, WalkingDownLeft, WalkingUpLeft
-	} status;
+	
 	
 };

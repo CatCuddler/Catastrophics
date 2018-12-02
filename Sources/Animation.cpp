@@ -34,18 +34,9 @@ void Animation::update(Kore::vec2 newPosition) {
 		
 	}
 	
-	if (position.x() < newPosition.x()) status = WalkingRight;
-	else if (position.x() > newPosition.x()) status = WalkingLeft;
-	else if (position.x() == newPosition.x()) {
+	if (position.x() == newPosition.x()) {
 		if (status == WalkingRight) status = StandingRight;
 		else if (status == WalkingLeft) status = StandingLeft;
-	}
-	
-	if (position.y() < newPosition.y()) status = WalkingDownLeft;
-	//else if (position.y() > newPosition.y()) status = WalkingUpRight;
-	else if (position.y() == newPosition.y()) {
-		if (status == WalkingDownLeft) status = StandingLeft;
-		else if (status == WalkingDownRight) status = StandingRight;
 	}
 	
 	position = newPosition;
@@ -91,32 +82,25 @@ void Animation::render(Kore::Graphics2::Graphics2* g2, float camX, float camY) {
 			//log(LogLevel::Info, "Walking left");
 			break;
 		case WalkingDownRight:
-			g2->pushRotation(Kore::pi / 4, tileWidth / 2, tileHeight / 2);
-			
-			
-			//g2->drawScaledSubImage(texture, animIndex * width, 0, width, height, pos.x(), pos.y(), width, height);
-			//g2->drawImage(texture, 0, 0);
-			log(LogLevel::Info, "Walking down right");
-			
+			//g2->pushRotation(Kore::pi / 4, tileWidth / 2, tileHeight / 2);
+			g2->drawScaledSubImage(texture, animIndex * width, 0, width, height, pos.x(), pos.y(), width, height);
+			//log(LogLevel::Info, "Walking down right");
 			g2->transformation = Kore::mat3::Identity();
-			
 			break;
 		case WalkingDownLeft:
-			log(LogLevel::Info, "Walking down left");
-			g2->pushRotation(-Kore::pi / 4, tileWidth / 2, tileHeight / 2);
+			//g2->pushRotation(-Kore::pi / 4, tileWidth / 2, tileHeight / 2);
 			g2->drawScaledSubImage(texture, animIndex * width, 0, -width, height, pos.x(), pos.y(), width, height);
 			g2->transformation = Kore::mat3::Identity();
 			break;
 		case WalkingUpRight:
-			g2->pushRotation(-Kore::pi / 4, tileWidth / 2, tileHeight / 2);
-			//g2->drawScaledSubImage(texture, animIndex * width, 0, width, height, pos.x(), pos.y(), width, height);
-			log(LogLevel::Info, "Walking up");
+			//g2->pushRotation(-Kore::pi / 4, tileWidth / 2, tileHeight / 2);
+			g2->drawScaledSubImage(texture, animIndex * width, 0, width, height, pos.x(), pos.y(), width, height);
 			g2->transformation = Kore::mat3::Identity();
 			break;
 		case WalkingUpLeft:
-			g2->pushRotation(-Kore::pi / 4, tileWidth / 2, tileHeight / 2);
-			//g2->drawScaledSubImage(texture, animIndex * width, 0, width, height, pos.x(), pos.y(), width, height);
-			log(LogLevel::Info, "Walking up");
+			//g2->pushRotation(-Kore::pi / 4, tileWidth / 2, tileHeight / 2);
+			g2->drawScaledSubImage(texture, animIndex * width, 0, -width, height, pos.x(), pos.y(), width, height);
+			//log(LogLevel::Info, "Walking up left");
 			g2->transformation = Kore::mat3::Identity();
 			break;
 		}

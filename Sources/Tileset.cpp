@@ -160,6 +160,16 @@ int getTileIndex(float px, float py) {
 	return y * columns + x;
 }
 
+vec2 getTileCenterBottom(float px, float py) {
+	int x = px / tileWidth;
+	int y = py / tileHeight;
+	
+	float tileCenterX = x * tileWidth + tileWidth / 2;
+	float tileBottomY = y * tileHeight + tileHeight;
+	
+	return vec2(tileCenterX, tileBottomY);
+}
+
 vec2 findDoor(float lastX, float lastY) {
 	int compIndex = getTileIndex(lastX, lastY);
 	for (int i = 0; i < doorCount; ++i) {
