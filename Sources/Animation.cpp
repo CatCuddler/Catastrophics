@@ -21,7 +21,7 @@ void Animation::init(const char* textureName, int animTiles, AnimationTyp typ) {
 	this->status = Animation::Status::StandingRight;
 	this->animIndex = 0;
 	this->frameCount = 0;
-	position = vec2(0, 0);
+	position = vec2(width / 2, tileHeight + height/2);
 }
 
 void Animation::update(Kore::vec2 newPosition) {
@@ -41,12 +41,12 @@ void Animation::update(Kore::vec2 newPosition) {
 		else if (status == WalkingLeft) status = StandingLeft;
 	}
 	
-	/*if (position.y() < newPosition.y()) status = WalkingDownLeft;
-	else if (position.y() > newPosition.y()) status = WalkingUpRight;
+	if (position.y() < newPosition.y()) status = WalkingDownLeft;
+	//else if (position.y() > newPosition.y()) status = WalkingUpRight;
 	else if (position.y() == newPosition.y()) {
 		if (status == WalkingDownLeft) status = StandingLeft;
-		else if (status == WalkingLeft) status = StandingRight;
-	}*/
+		else if (status == WalkingDownRight) status = StandingRight;
+	}
 	
 	position = newPosition;
 }
@@ -104,7 +104,7 @@ void Animation::render(Kore::Graphics2::Graphics2* g2, float camX, float camY) {
 		case WalkingDownLeft:
 			log(LogLevel::Info, "Walking down left");
 			g2->pushRotation(-Kore::pi / 4, tileWidth / 2, tileHeight / 2);
-			//g2->drawScaledSubImage(texture, animIndex * width, 0, -width, height, pos.x(), pos.y(), width, height);
+			g2->drawScaledSubImage(texture, animIndex * width, 0, -width, height, pos.x(), pos.y(), width, height);
 			g2->transformation = Kore::mat3::Identity();
 			break;
 		case WalkingUpRight:

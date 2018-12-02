@@ -29,6 +29,8 @@ namespace {
 	bool moveDownLeft;
 	float playerWidth, playerHeight;
 	
+	float targetYPosition;
+	
 	Animation* guy;
 	vec2 guyPosition;
 	
@@ -73,27 +75,33 @@ namespace {
 		
 		float moveDistance = 4;
 		
-		if (left && px >= -10) {
-			px -= moveDistance;
-		} else if (right && px <= columns * tileWidth - playerWidth + 10) {
-			px += moveDistance;
-		} else if (up && py >= tileHeight - playerHeight + moveDistance) {
-			py -= moveDistance;
-			if (tileID >= Stairs1 && tileID <= Stairs3) {
-				log(LogLevel::Info, "walk upstairs -> right");
-			}
-		} else if (down && py <= rows * tileHeight - playerHeight) {
-			py += moveDistance;
-			if (tileID == Stairs3) {
-			//	moveDownLeft = true;
+		if (!moveDownLeft) {
+			if (left && px >= -10) {
+				px -= moveDistance;
+			} else if (right && px <= columns * tileWidth - playerWidth + 10) {
+				px += moveDistance;
+			} else if (up && py >= tileHeight - playerHeight + moveDistance) {
+				if (tileID >= Stairs1 && tileID <= Stairs3) {
+					log(LogLevel::Info, "walk upstairs -> right");
+					py -= moveDistance;
+				}
+			} else if (down && py <= rows * tileHeight - playerHeight) {
+				if (tileID == Stairs3) {
+					targetYPosition = py + tileHeight;
+					moveDownLeft = true;
+				}
 			}
 		}
 		//log(LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 		
 		if (moveDownLeft) {
-			px -= moveDistance;
-			py -= moveDistance;
-			if (tileID == Stairs1) moveDownLeft = false;
+			if (py == targetYPosition) {
+				moveDownLeft = false;
+				px -= moveDistance;
+			} else {
+				px -= moveDistance;
+				py += moveDistance;
+			}
 		}
 		
 		playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
