@@ -3,8 +3,8 @@
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer name="Tile Layer 1" width="6" height="3">
   <data encoding="csv">
-1,2,24,27,3,28,
-16,26,25,18,29,30,
+1,2,24,27,31,3,
+16,26,25,29,30,6,
 19,4,23,2,1,17
 </data>
  </layer>
