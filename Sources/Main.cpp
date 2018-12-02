@@ -22,6 +22,8 @@ namespace {
 	float camX = 0;
 	float camY = 0;
 	
+	int level = 1;
+	
 	Graphics2::Graphics2* g2;
 	
 	Animation* cat;
@@ -44,11 +46,21 @@ namespace {
 	const char* helpText;
 	const char* const stairsUp = "Key Up: walk the stairs up";
 	const char* const stairsDown = "Key Down: walk the stairs down";
+	const char* const jumpText = "Key Up: jump on the table";
+	const char* const loadLevelText = "Key Up: load next level";
 	
 	enum GameState {
 		TitleState, InGameState, GameOverState
 	};
 	GameState state;
+	
+	void loadNextLevel() {
+		char levelName[20];
+		sprintf(levelName, "Tiles/level%i.csv", level);
+		log(LogLevel::Info, "Load level %i", level);
+		initTiles(levelName, "Tiles/tiles.png");
+		++level;
+	}
 	
 	void moveCatInTheMiddleOfTheTile() {
 		vec2 tileCenter = getTileCenterBottom(playerCenter.x(), playerCenter.y());
@@ -58,7 +70,7 @@ namespace {
 	
 	void moveCat() {
 		int tileID = getTileID(playerCenter.x(), playerCenter.y());
-		//log(LogLevel::Info, "%f %f", tileCenter.x(), tileCenter.y());
+		//log(LogLevel::Info, "%i", tileID);
 		
 		helpText = nullptr;
 		if (tileID == Stairs3) {
@@ -77,6 +89,19 @@ namespace {
 			//log(LogLevel::Info, "walk upstairs -> left");
 			helpText = stairsUp;
 		}
+		// Check if next level can be load
+		else if (tileID == Door) {
+			helpText = loadLevelText;
+		}
+		
+		// Check if the cat can jump on the table
+		if (cat->status == Animation::Status::WalkingRight)
+			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
+		if (cat->status == Animation::Status::WalkingLeft)
+			tileID = getTileID(playerCenter.x() - tileWidth, playerCenter.y());
+		if (tileID == TableGlobus || tileID == TableAndCandles || tileID == Laptop || tileID == Candle) {
+			helpText = jumpText;
+		}
 		
 		float moveDistance = 4;
 		
@@ -88,7 +113,7 @@ namespace {
 			} else if (right && px <= columns * tileWidth - playerWidth + 10) {
 				px += moveDistance;
 				cat->status = Animation::Status::WalkingRight;
-			} else if (up && py >= tileHeight - playerHeight + moveDistance) {
+			} else if (up /*&& py >= tileHeight - playerHeight + moveDistance*/) {
 				if (tileID == Stairs1) {
 					moveCatInTheMiddleOfTheTile();
 					targetYPosition = py - tileHeight;
@@ -100,7 +125,10 @@ namespace {
 					targetYPosition = py - tileHeight;
 					cat->status = Animation::Status::WalkingUpLeft;
 				}
-			} else if (down && py <= rows * tileHeight - playerHeight) {
+				if (tileID == Door) {
+					loadNextLevel();
+				}
+			} else if (down /*&& py <= rows * tileHeight - playerHeight*/) {
 				if (tileID == Stairs3) {
 					moveCatInTheMiddleOfTheTile();
 					targetYPosition = py + tileHeight;
@@ -262,7 +290,7 @@ int kore(int argc, char** argv) {
 	Kore::System::init("LudumDare43", w * scale, h * scale);
 	Kore::System::setCallback(update);
 	
-	initTiles("Tiles/tiles.csv", "Tiles/tiles.png");
+	loadNextLevel();
 	
 	cat = new Animation();
 	cat->init("Tiles/cat_walking_anim.png", 4, Animation::AnimationTyp::Walking);
