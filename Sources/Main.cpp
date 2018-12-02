@@ -5,6 +5,7 @@
 #include <Kore/Input/Keyboard.h>
 #include <Kore/System.h>
 #include <Kore/Log.h>
+#include <Kore/Graphics1/Color.h>
 
 #include "Tileset.h"
 #include "Animation.h"
@@ -30,8 +31,14 @@ namespace {
 	int lastDirection = 1;	// 0 - left, 1 - right
 	bool left, right, up, down;
 	
+	Kravur* font14;
+	Kravur* font24;
+	Kravur* font34;
+	Kravur* font44;
+	
+	const char* helpText;
 	const char* const stairsUp = "Key Up: walk the stairs up";
-	const char* const stairsDown = "Key Up: walk the stairs down";
+	const char* const stairsDown = "Key Down: walk the stairs down";
 	
 	enum GameState {
 		TitleState, InGameState, GameOverState
@@ -54,20 +61,25 @@ namespace {
 		
 		cat->update(playerPosition);
 		
+		helpText = nullptr;
+		
 		int tileID = getTileID(playerPosition.x(), playerPosition.y());
 		//log(LogLevel::Info, "%i", tileID);
 		if (tileID == Stairs3) {
 			log(LogLevel::Info, "walk downstairs -> left");
-			
+			helpText = stairsDown;
 		}
 		if (tileID == Stairs4) {
 			log(LogLevel::Info, "walk downstairs -> right");
+			helpText = stairsDown;
 		}
 		if (tileID == Stairs1) {
 			log(LogLevel::Info, "walk upstairs");
+			helpText = stairsUp;
 		}
 		if (tileID == Stairs6) {
 			log(LogLevel::Info, "walk upstairs -> left -> right");
+			helpText = stairsUp;
 		}
 	}
 	
@@ -76,6 +88,18 @@ namespace {
 		guyPosition = playerPosition;
 		
 		guy->update(guyPosition);
+	}
+	
+	void drawGUI() {
+		g2->setFont(font14);
+		g2->setFontColor(Graphics1::Color::Black);
+		g2->setFontSize(14);
+		
+		if (helpText != nullptr) {
+			g2->drawString(helpText, 0, 0);
+		}
+		
+		g2->setColor(Graphics1::Color::White);
 	}
 
 	void update() {
@@ -97,10 +121,14 @@ namespace {
 			
 			cat->render(g2);
 			//guy->render(g2);
+			
+			drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
 		}
+		
+		
 		
 		g2->end();
 
@@ -177,6 +205,11 @@ int kore(int argc, char** argv) {
 	right = false;
 	up = false;
 	down = false;
+	
+	font14 = Kravur::load("Fonts/arial", FontStyle(), 14);
+	font24 = Kravur::load("Fonts/arial", FontStyle(), 24);
+	font34 = Kravur::load("Fonts/arial", FontStyle(), 34);
+	font44 = Kravur::load("Fonts/arial", FontStyle(), 44);
 	
 	state = InGameState;
 	
