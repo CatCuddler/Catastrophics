@@ -17,13 +17,20 @@ namespace {
 	const int w = 128 * 2;
 	const int h = 168;
 	
+	float px = 0;
+	float py = 0;
 	float camX = 0;
 	float camY = 0;
+	
+	int level = 1;
 	
 	Graphics2::Graphics2* g2;
 	
 	Animation* cat;
-	vec2 playerPosition;
+	vec2 playerCenter;
+	float playerWidth, playerHeight;
+	
+	float targetYPosition;
 	
 	Animation* guy;
 	vec2 guyPosition;
@@ -39,53 +46,131 @@ namespace {
 	const char* helpText;
 	const char* const stairsUp = "Key Up: walk the stairs up";
 	const char* const stairsDown = "Key Down: walk the stairs down";
+	const char* const jumpText = "Key Up: jump on the table";
+	const char* const loadLevelText = "Key Up: load next level";
 	
 	enum GameState {
 		TitleState, InGameState, GameOverState
 	};
 	GameState state;
 	
+	void loadNextLevel() {
+		char levelName[20];
+		sprintf(levelName, "Tiles/level%i.csv", level);
+		log(LogLevel::Info, "Load level %i", level);
+		initTiles(levelName, "Tiles/tiles.png");
+		++level;
+	}
+	
+	void moveCatInTheMiddleOfTheTile() {
+		vec2 tileCenter = getTileCenterBottom(playerCenter.x(), playerCenter.y());
+		px = tileCenter.x() - playerWidth / 2;
+		py = tileCenter.y() - playerHeight;
+	}
+	
 	void moveCat() {
+		int tileID = getTileID(playerCenter.x(), playerCenter.y());
+		//log(LogLevel::Info, "%i", tileID);
+		
+		helpText = nullptr;
+		if (tileID == Stairs3) {
+			//log(LogLevel::Info, "walk downstairs -> left");
+			helpText = stairsDown;
+		}
+		else if (tileID == Stairs4) {
+			//log(LogLevel::Info, "walk downstairs -> right");
+			helpText = stairsDown;
+		}
+		else if (tileID == Stairs1) {
+			//log(LogLevel::Info, "walk upstairs -> right");
+			helpText = stairsUp;
+		}
+		else if (tileID == Stairs6) {
+			//log(LogLevel::Info, "walk upstairs -> left");
+			helpText = stairsUp;
+		}
+		// Check if next level can be load
+		else if (tileID == Door) {
+			helpText = loadLevelText;
+		}
+		
+		// Check if the cat can jump on the table
+		if (cat->status == Animation::Status::WalkingRight)
+			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
+		if (cat->status == Animation::Status::WalkingLeft)
+			tileID = getTileID(playerCenter.x() - tileWidth, playerCenter.y());
+		if (tileID == TableGlobus || tileID == TableAndCandles || tileID == Laptop || tileID == Candle) {
+			helpText = jumpText;
+		}
+		
 		float moveDistance = 4;
 		
-		if (left && playerPosition.x() >= moveDistance) {
-			playerPosition = vec2(playerPosition.x() -= moveDistance, playerPosition.y());
-		} else if (right && playerPosition.x() <= columns * tileWidth - w - moveDistance) {
-			playerPosition = vec2(playerPosition.x() += moveDistance, playerPosition.y());
-		} else if (up && playerPosition.y() >= moveDistance) {
-			playerPosition = vec2(playerPosition.x(), playerPosition.y() -= moveDistance);
-		} else if (down && playerPosition.y() <= rows * tileHeight - h - moveDistance) {
-			playerPosition = vec2(playerPosition.x(), playerPosition.y() += moveDistance);
+		if (cat->status != Animation::Status::WalkingDownLeft && cat->status != Animation::Status::WalkingDownRight &&
+			cat->status != Animation::Status::WalkingUpLeft && cat->status != Animation::Status::WalkingUpRight) {
+			if (left && px >= -10) {
+				px -= moveDistance;
+				cat->status = Animation::Status::WalkingLeft;
+			} else if (right && px <= columns * tileWidth - playerWidth + 10) {
+				px += moveDistance;
+				cat->status = Animation::Status::WalkingRight;
+			} else if (up /*&& py >= tileHeight - playerHeight + moveDistance*/) {
+				if (tileID == Stairs1) {
+					moveCatInTheMiddleOfTheTile();
+					targetYPosition = py - tileHeight;
+					cat->status = Animation::Status::WalkingUpRight;
+				}
+				if (tileID >= Stairs6) {
+					moveCatInTheMiddleOfTheTile();
+					px += 50;
+					targetYPosition = py - tileHeight;
+					cat->status = Animation::Status::WalkingUpLeft;
+				}
+				if (tileID == Door) {
+					loadNextLevel();
+				}
+			} else if (down /*&& py <= rows * tileHeight - playerHeight*/) {
+				if (tileID == Stairs3) {
+					moveCatInTheMiddleOfTheTile();
+					targetYPosition = py + tileHeight;
+					cat->status = Animation::Status::WalkingDownLeft;
+				}
+				if (tileID == Stairs4) {
+					moveCatInTheMiddleOfTheTile();
+					targetYPosition = py + tileHeight;
+					cat->status = Animation::Status::WalkingDownRight;
+				}
+			}
 		}
 		//log(LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 		
-		cat->update(playerPosition);
+		if (cat->status == Animation::Status::WalkingDownLeft) {
+			px -= moveDistance;
+			py += moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingLeft;
+		}
+		if (cat->status == Animation::Status::WalkingUpRight) {
+			px += moveDistance;
+			py -= moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingRight;
+		}
+		if (cat->status == Animation::Status::WalkingDownRight) {
+			px += moveDistance;
+			py += moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingRight;
+		}
+		if (cat->status == Animation::Status::WalkingUpLeft) {
+			px -= moveDistance;
+			py -= moveDistance;
+			if (py == targetYPosition) cat->status = Animation::Status::StandingLeft;
+		}
 		
-		helpText = nullptr;
-		
-		int tileID = getTileID(playerPosition.x(), playerPosition.y());
-		//log(LogLevel::Info, "%i", tileID);
-		if (tileID == Stairs3) {
-			log(LogLevel::Info, "walk downstairs -> left");
-			helpText = stairsDown;
-		}
-		if (tileID == Stairs4) {
-			log(LogLevel::Info, "walk downstairs -> right");
-			helpText = stairsDown;
-		}
-		if (tileID == Stairs1) {
-			log(LogLevel::Info, "walk upstairs");
-			helpText = stairsUp;
-		}
-		if (tileID == Stairs6) {
-			log(LogLevel::Info, "walk upstairs -> left -> right");
-			helpText = stairsUp;
-		}
+		playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
+		cat->update(playerCenter);
 	}
 	
 	void moveGuy() {
 		// TODO: guy should follow the cat
-		guyPosition = playerPosition;
+		guyPosition = playerCenter;
 		
 		guy->update(guyPosition);
 	}
@@ -107,20 +192,38 @@ namespace {
 		Graphics4::restoreRenderTarget();
 		Graphics4::clear(Graphics4::ClearColorFlag);
 		
+		float targetCamX = Kore::min(Kore::max(0.0f, playerCenter.x() - w / 2), 1.f * columns * tileWidth - w);
+		float targetCamY = playerCenter.y() - tileHeight + playerHeight / 2;//Kore::min(Kore::max(0.0f, playerCenter.y() - h / 2), 1.f * rows * tileHeight - h);
+		
+		vec2 cam(camX, camY);
+		vec2 target(targetCamX, targetCamY);
+		vec2 dir = target - cam;
+		if (dir.getLength() < 16.0f) {
+			camX = targetCamX;
+			camY = targetCamY;
+		} else {
+			dir.setLength(15.0f);
+			cam = cam + dir;
+			camX = cam.x();
+			camY = cam.y();
+		}
+		
 		moveCat();
-		moveGuy();
+		//moveGuy();
 
 		g2->begin(false, w, h);
 		
 		if (state == TitleState) {
 			log(LogLevel::Info, "Add title screen");
 		} else if (state == InGameState) {
-			camX = playerPosition.x();
-			camY = playerPosition.y();
+			//camX = playerPosition.x();
+			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
 			
-			cat->render(g2);
+			cat->render(g2, camX, camY);
 			//guy->render(g2);
+			
+			animateSpider(playerCenter.x(), playerCenter.y());
 			
 			drawGUI();
 		} else if (state == GameOverState) {
@@ -189,11 +292,15 @@ int kore(int argc, char** argv) {
 	Kore::System::init("LudumDare43", w * scale, h * scale);
 	Kore::System::setCallback(update);
 	
-	initTiles("Tiles/tiles.csv", "Tiles/tiles.png");
+	loadNextLevel();
 	
-	playerPosition = vec2(0, 0);
 	cat = new Animation();
 	cat->init("Tiles/cat_walking_anim.png", 4, Animation::AnimationTyp::Walking);
+	playerWidth = cat->getWidth();
+	playerHeight = cat->getHeight();
+	px = 0;
+	py = tileHeight - playerHeight;
+	playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
 	
 	guyPosition = vec2(0, 0);
 	guy = new Animation();
