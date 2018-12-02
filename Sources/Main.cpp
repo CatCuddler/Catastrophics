@@ -50,42 +50,6 @@ namespace {
 	};
 	GameState state;
 	
-	int x0 = 0;
-	int y0 = 0;
-	int x1 = 100;
-	int y1 = 100;
-	
-	void drawline(int x0, int y0, int x1, int y1) {
-		int dx, dy, p, x, y;
-		
-		dx = x1-x0;
-		dy = y1-y0;
-		
-		x = x0;
-		y = y0;
-		
-		p = 2 * dy - dx;
-		
-		//g2 ->setColor(Graphics2::Color::Red);
-		while (x < x1) {
-			if(p >= 0) {
-				//putpixel(x,y,7);
-				//g2->drawRect(x, y, 5, 5);
-				px = x;
-				py = y;
-				y = y + 1;
-				p = p + 2 * dy - 2 * dx;
-			} else {
-				//putpixel(x,y,7);
-				//g2->drawRect(x, y, 5, 5);
-				px = x;
-				py = y;
-				p = p + 2 * dy;
-			}
-			x = x + 1;
-		}
-	}
-	
 	void moveCatInTheMiddleOfTheTile() {
 		vec2 tileCenter = getTileCenterBottom(playerCenter.x(), playerCenter.y());
 		px = tileCenter.x() - playerWidth / 2;
@@ -116,8 +80,8 @@ namespace {
 		
 		float moveDistance = 4;
 		
-		if (cat->status != Animation::Status::WalkingDownLeft || cat->status != Animation::Status::WalkingDownRight ||
-			cat->status != Animation::Status::WalkingUpLeft || cat->status != Animation::Status::WalkingUpRight) {
+		if (cat->status != Animation::Status::WalkingDownLeft && cat->status != Animation::Status::WalkingDownRight &&
+			cat->status != Animation::Status::WalkingUpLeft && cat->status != Animation::Status::WalkingUpRight) {
 			if (left && px >= -10) {
 				px -= moveDistance;
 				cat->status = Animation::Status::WalkingLeft;
@@ -132,6 +96,7 @@ namespace {
 				}
 				if (tileID >= Stairs6) {
 					moveCatInTheMiddleOfTheTile();
+					px += 50;
 					targetYPosition = py - tileHeight;
 					cat->status = Animation::Status::WalkingUpLeft;
 				}
