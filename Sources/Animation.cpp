@@ -50,7 +50,7 @@ void Animation::changeFloor() {
 
 void Animation::render(Kore::Graphics2::Graphics2* g2) {
 	float px = position.x();
-	float py = tileHeight - height;
+	float py = tileHeight - height + position.y();
 	
 	switch (status) {
 		case StandingRight:
