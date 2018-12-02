@@ -150,9 +150,8 @@ int getFloor(float py) {
 }
 
 int getTileID(float px, float py) {
-	int x = px / tileWidth;
-	int y = py / tileHeight;
-	return source[y * columns  + x];
+	int index = getTileIndex(px, py);
+	return source[index];
 }
 
 int getTileIndex(float px, float py) {
