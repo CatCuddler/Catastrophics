@@ -113,7 +113,7 @@ void drawTiles(Graphics2::Graphics2* g2, float camX, float camY) {
 	}
 }
 
-bool animateSpider(float px, float py, float fx, float fy, float mx_world, float my_world, float energy) {
+bool animateSpider(float px, float py) {
 	bool caughtPlayer = false;
 	++spiderFrameCount;
 
@@ -126,17 +126,14 @@ bool animateSpider(float px, float py, float fx, float fy, float mx_world, float
 	for (int i = 0; i < spiderCountCurr; ++i) {
 		int collx = (spiderPos[i].x() + .5f) * tileWidth;
 		int collyMin = spiderPos[i].y() * tileHeight + 9 + (spiderState[i] - Spider1) * 11;
-		int collyMax = collyMin + 28;
 		spiderCooldownCurr[i] -= 1;
 		if (doMove) {
-			int collynextMin = collyMin + 11;
-			int collynextMax = collyMax + 11;
-			bool inRange = collx - px <= tileWidth && getFloor(collyMin) == getFloor(py);
-			//bool inLight = isInLight(collx, collyMin, collyMax, fx, fy, mx_world, my_world, energy);
-			//if (inLight) spiderCooldownCurr[i] = spiderCooldownMax;
-			//bool active = inRange && !inLight;
-			//if (active && spiderState[i] < Spider8 && !isInLight(collx, collynextMin, collynextMax, fx, fy, mx_world, my_world, energy) && spiderCooldownCurr[i] <= 0) ++spiderState[i];
-			//else if (!active && spiderState[i] > Spider1) --spiderState[i];
+			bool inRange = abs(collx - px) <= tileWidth;
+			bool active = inRange ;
+			if (active && spiderState[i] < Spider8 && spiderCooldownCurr[i] <= 0)
+				++spiderState[i];
+			else if (!active && spiderState[i] > Spider1)
+				--spiderState[i];
 			source[spiderPos[i].y() * columns  + spiderPos[i].x()] = spiderState[i];
 		}
 		caughtPlayer |= (spiderState[i] >= Spider3 && Kore::abs(collx - px) < tileWidth * 0.25f && getFloor(collyMin) == getFloor(py));

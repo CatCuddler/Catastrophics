@@ -223,6 +223,8 @@ namespace {
 			cat->render(g2, camX, camY);
 			//guy->render(g2);
 			
+			animateSpider(playerCenter.x(), playerCenter.y());
+			
 			drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
