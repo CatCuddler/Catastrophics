@@ -39,9 +39,8 @@ int getFloor(float py);
 int getTileID(float px, float py);
 int getTileIndex(float px, float py);
 vec2 findDoor(float lastX, float lastY);
-bool isInLight(float x, float yMin, float yMax, float fx, float fy, float mx_world, float my_world, float energy);
 
 void resetSpiders();
 bool animateSpider(float px, float py, float fx, float fy, float mx_world, float my_world, float energy);
 	
-enum TileID {Door = 0, Window = 1, Books = 2, Closet = 3, TableGlobus = 4, TableAndLamp = 5, SpiderWeb = 6, Spider1 = 7, Spider2 = 8, Spider3 = 9, Spider4 = 10, Spider5 = 11, Spider6 = 12, Spider7 = 13, Spider8 = 14, Spider9 = 15, Wall = 16, Heater = 17, Table = 18, PC = 19, DrinkAutomat = 20, KokaKola = 21, Plant1 = 22, Plant2 = 23, Clock = 24, Poster = 25, Bank = 26, Cactus = 27, Pillar = 28, DirtyWall = 29, LightSwitch = 30, Picture = 31};
+enum TileID {Door = 0, Window = 1, Books = 2, Closet = 3, TableGlobus = 4, TableAndCandles = 5, SpiderWeb = 6, Spider1 = 7, Spider2 = 8, Spider3 = 9, Spider4 = 10, Spider5 = 11, Spider6 = 12, Spider7 = 13, Spider8 = 14, BookShelf = 15, Wall = 16, Heater = 17, Laptop = 18, PC = 19, DrinkAutomat = 20, Pillar = 21, TV = 22, Plant1 = 23, PlantAndClock = 24, Candle = 25, BottleAndLaptop = 26, CactusAndPictures = 27, Stairs1 = 28, Stairs2 = 29, Stairs3 = 30, Stairs4 = 31};
