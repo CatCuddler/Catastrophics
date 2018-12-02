@@ -30,6 +30,9 @@ namespace {
 	int lastDirection = 1;	// 0 - left, 1 - right
 	bool left, right, up, down;
 	
+	const char* const stairsUp = "Key Up: walk the stairs up";
+	const char* const stairsDown = "Key Up: walk the stairs down";
+	
 	enum GameState {
 		TitleState, InGameState, GameOverState
 	};
@@ -53,8 +56,18 @@ namespace {
 		
 		int tileID = getTileID(playerPosition.x(), playerPosition.y());
 		//log(LogLevel::Info, "%i", tileID);
-		if (tileID >= Stairs1 && tileID <= Stairs4) {
-			log(LogLevel::Info, "stairs");
+		if (tileID == Stairs3) {
+			log(LogLevel::Info, "walk downstairs -> left");
+			
+		}
+		if (tileID == Stairs4) {
+			log(LogLevel::Info, "walk downstairs -> right");
+		}
+		if (tileID == Stairs1) {
+			log(LogLevel::Info, "walk upstairs");
+		}
+		if (tileID == Stairs6) {
+			log(LogLevel::Info, "walk upstairs -> left -> right");
 		}
 	}
 	
