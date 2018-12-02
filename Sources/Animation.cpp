@@ -29,8 +29,9 @@ void Animation::update(Kore::vec2 newPosition) {
 	if (frameCount > 10) {
 		frameCount = 0;
 		
-		animIndex = animIndex % (animTiles-1);
 		++animIndex;
+		animIndex = animIndex % (animTiles);
+		
 	}
 	
 	if (position.x() < newPosition.x()) status = WalkingRight;
@@ -66,7 +67,7 @@ void Animation::render(Kore::Graphics2::Graphics2* g2) {
 			//log(LogLevel::Info, "Standing left");
 			break;
 		case WalkingLeft: {
-			g2->drawScaledSubImage(texture, (animIndex + 1) * width, 0, -width, height, px - position.x(), py - position.y(), width, height);
+			g2->drawScaledSubImage(texture, (animIndex + 1)  * width, 0, -width, height, px - position.x(), py - position.y(), width, height);
 			//log(LogLevel::Info, "Walking left");
 			break;
 		}
