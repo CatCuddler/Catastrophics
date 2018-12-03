@@ -46,6 +46,7 @@ void loadCsv(const char* csvFile) {
 
 	doorCount = 0;
 	spiderCountCurr = 0;
+	objectCountCurr = 0;
 	doors = new vec2[(rows - 1) * 2];
 	for (int y = 0; y < rows; ++y) {
 		for (int x = 0; x < columns; ++x) {
@@ -61,9 +62,11 @@ void loadCsv(const char* csvFile) {
 				spiderCooldownCurr[spiderCountCurr] = 0;
 				++spiderCountCurr;
 			}
-			else if (index == TableGlobus1) {
-				globusPos = vec2i(x, y);
-				globusState = TableGlobus1;
+			else if (index == TableGlobus1 || index == TableAndCandles1) {
+				assert(objectCountCurr < dropCountMax);
+				objectPositions[objectCountCurr] = vec2i(x, y);
+				objectState[objectCountCurr] = index;
+				++objectCountCurr;
 			}
 		}
 	}
@@ -121,26 +124,28 @@ bool animateSpider(float px, float py) {
 	return caughtPlayer;
 }
 
-void animateGlobus(float px, float py) {
-	++globusFrameCount;
+void drop(float px, float py) {
+	
+	++objectFrameCount;
 	
 	bool doMove = false;
-	if (globusFrameCount >= 5) {
+	if (objectFrameCount >= 5) {
 		doMove = true;
-		globusFrameCount = 0;
+		objectFrameCount = 0;
 	}
 	
-	int collx = (globusPos.x() + .5f) * tileWidth;
-	bool inRange = Kore::abs(collx - px) <= tileWidth / 4;
-	
-	if (doMove) {
-		if (inRange && globusState < TableGlobus4)
-			++globusState;
-		source[globusPos.y() * columns  + globusPos.x()] = globusState;
+	for (int i = 0; i < objectCountCurr; ++i) {
+		if (doMove) {
+			int collx = (objectPositions[i].x() + .5f) * tileWidth;
+			bool inRange = Kore::abs(collx - px) <= tileWidth / 4;
+			if (inRange &&
+				((objectState[i] >= TableGlobus1 && objectState[i] < TableGlobus4) ||
+				(objectState[i] >= TableAndCandles1 && objectState[i] < TableAndCandles4)))
+				++objectState[i];
+			source[objectPositions[i].y() * columns + objectPositions[i].x()] = objectState[i];
+		}
 	}
-	
 }
-
 
 int getFloor(float py) {
 	return ((int)py) / tileHeight;

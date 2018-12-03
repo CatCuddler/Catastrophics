@@ -113,7 +113,7 @@ namespace {
 			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
 		if (cat_walk->status == Animation::Status::WalkingLeft)
 			tileID = getTileID(playerCenter.x() - tileWidth, playerCenter.y());
-		if (tileID == TableGlobus1 || tileID == TableAndCandles) {
+		if (tileID == TableGlobus1 || tileID == TableAndCandles1) {
 			helpText = jumpText;
 		}
 		
@@ -192,7 +192,12 @@ namespace {
 
 		if (falling)
 		{
+			py += pushUp;
+			
+			if (py > )
+			{
 
+			}
 
 		}
 		
@@ -256,7 +261,7 @@ namespace {
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
-			animateGlobus(playerCenter.x(), playerCenter.y());
+			drop(playerCenter.x(), playerCenter.y());
 			
 			drawGUI();
 		} else if (state == GameOverState) {
