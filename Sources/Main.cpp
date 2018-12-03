@@ -31,6 +31,11 @@ namespace {
 	int maxJumpFrames = 20;
 	float startHeight = -1;
 
+	int droppedObjects = 0;
+	const int maxDroppedObjects1 = 2;
+	const int maxDroppedObjects2 = 0;
+	const int maxDroppedObjects3 = 2;
+
 
 	int level = 1;
 	
@@ -63,7 +68,8 @@ namespace {
 	const char* const stairsDown = "Key Down: walk the stairs down";
 	const char* const jumpText = "Key Up: jump on the table";
 	const char* const loadLevelText = "Key Up: load next level";
-	
+	const char* const cannotLoadNextLevel = "You did not sacrificed enough objects.";
+
 	enum GameState {
 		TitleState, InGameState, GameOverState
 	};
@@ -72,12 +78,37 @@ namespace {
 	void loadNextLevel() {
 		char levelName[20];
 		sprintf(levelName, "Tiles/level%i.csv", level);
-		log(LogLevel::Info, "Load level %i", level);
 		
-		if (level == 1) initTiles(levelName, "Tiles/tiles.png");
-		if (level == 2) initTiles(levelName, "Tiles/kitchen.png");
-		if (level == 3) initTiles(levelName, "Tiles/bath.png");
-		++level;
+		if (level == 1) {
+			log(LogLevel::Info, "Load level %i", level);
+			initTiles(levelName, "Tiles/tiles.png");
+			++level;
+		}
+		else if (level == 2) {
+			if (droppedObjects >= maxDroppedObjects1) {
+				log(LogLevel::Info, "Load level %i", level);
+				initTiles(levelName, "Tiles/kitchen.png");
+				++level;
+			} else {
+				helpText = cannotLoadNextLevel;
+			}
+		}
+		else if (level == 3) {
+			if (droppedObjects >= maxDroppedObjects2) {
+				log(LogLevel::Info, "Load level %i", level);
+				initTiles(levelName, "Tiles/bath.png");
+				++level;
+			}
+		}
+		else if (level == 4) {
+			if (droppedObjects >= maxDroppedObjects3) {
+				//initTiles(levelName, "Tiles/bath.png");
+				log(LogLevel::Info, "TODO: Game over");
+				++level;
+			}
+		}
+		
+		droppedObjects = 0;
 	}
 	
 	void moveCatInTheMiddleOfTheTile() {
