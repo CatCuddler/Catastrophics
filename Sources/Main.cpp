@@ -23,8 +23,10 @@ namespace {
 	float camY = 0;
 	
 	float pushUp = 5;
+	int jumpPrep = 0;
+	int maxJumpPrep = 30;
 	int jumpFrames = 0;
-	int maxJumpFrames = 10;
+	int maxJumpFrames = 80;
 	float startHeight = 0;
 
 	int level = 1;
@@ -43,7 +45,7 @@ namespace {
 	vec2 guyPosition;
 	
 	int lastDirection = 1;	// 0 - left, 1 - right
-	bool left, right, up, down, jump, falling, attack;
+	bool left, right, up, down, prep, jump, falling, attack;
 	
 	Kravur* font14;
 	Kravur* font24;
@@ -73,11 +75,6 @@ namespace {
 		vec2 tileCenter = getTileCenterBottom(playerCenter.x(), playerCenter.y());
 		px = tileCenter.x() - playerWidth / 2;
 		py = tileCenter.y() - playerHeight;
-	}
-	
-	void setCatOnTheFloor()
-	{
-		
 	}
 
 	void moveCat() {
@@ -178,6 +175,18 @@ namespace {
 			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingLeft;
 		}
 
+		if (prep)
+		{
+			++jumpPrep;
+			if (jumpPrep > maxJumpPrep)
+			{
+				jumpPrep = 0;
+				prep = false;
+				falling = false;
+				jump = true;
+			}
+		}
+
 		if (jump)
 		{
 			if (startHeight == -1)
@@ -191,6 +200,7 @@ namespace {
 			{
 				jumpFrames = 0;
 				jump = false;
+				prep = false;
 				falling = true;
 			}
 		}
@@ -209,6 +219,8 @@ namespace {
 		
 		playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
 		cat_walk->update(playerCenter);
+		cat_jump->update(playerCenter);
+		cat_attack->update(playerCenter);
 	}
 	
 	void moveGuy() {
@@ -262,8 +274,25 @@ namespace {
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
-			
-			cat_walk->render(g2, camX, camY);
+			if (prep)
+			{
+				cat_jump->renderFrame(g2, 1, camX, camY);
+			}
+			else if (jump)
+			{
+				if (jumpFrames < (15))
+				{
+					cat_jump->renderFrame(g2, 2, camX, camY);
+				}
+				else {
+					cat_jump->renderFrame(g2, 3, camX, camY);
+				}
+			}
+			else if (falling)
+			{
+				cat_jump->renderFrame(g2, 4, camX, camY);
+			}
+			else cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
@@ -304,8 +333,10 @@ namespace {
 				up = true;
 				break;
 			case KeySpace:
-				if(falling != true)
-					jump = true;
+				if (prep == false && jump == false && falling == false)
+				{
+					prep = true;
+				}
 				break;
 			case KeyControl:
 				attack = true;
@@ -334,8 +365,11 @@ namespace {
 				up = false;
 				break;
 			case KeySpace:
+				prep = false;
+				if(jump) falling = true;
 				jump = false;
-				falling = true;
+				jumpFrames = 0;
+				jumpPrep = 0;
 				break;
 			case KeyControl:
 				attack = false;
@@ -357,7 +391,7 @@ int kore(int argc, char** argv) {
 	playerWidth = cat_walk->getWidth();
 	playerHeight = cat_walk->getHeight();
 	cat_jump = new Animation();
-	cat_jump->init("Tiles/cat_jumping_anim.png", 2, Animation::AnimationTyp::Jumping);
+	cat_jump->init("Tiles/cat_jumping_anim.png", 5, Animation::AnimationTyp::Jumping);
 	cat_attack = new Animation();
 	cat_attack->init("Tiles/cat_attack_anim.png", 2, Animation::AnimationTyp::Attacking);
 
@@ -375,7 +409,9 @@ int kore(int argc, char** argv) {
 	right = false;
 	up = false;
 	down = false;
+	prep = false;
 	jump = false;
+	falling = false;
 	attack = false;
 
 	font14 = Kravur::load("Fonts/arial", FontStyle(), 14);
