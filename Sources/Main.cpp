@@ -112,7 +112,7 @@ namespace {
 			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
 		if (cat_walk->status == Animation::Status::WalkingLeft)
 			tileID = getTileID(playerCenter.x() - tileWidth, playerCenter.y());
-		if (tileID == TableGlobus1 || tileID == TableAndCandles1) {
+		if (tileID == Globus1 || tileID == Candles1) {
 			helpText = jumpText;
 		}
 		
