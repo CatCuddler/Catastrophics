@@ -22,7 +22,7 @@ namespace {
 	float camX = 0;
 	float camY = 0;
 	
-	float pushUp = 5;
+	float pushUp = 4;
 	int jumpPrep = 0;
 	int maxJumpPrep = 10;
 	int jumpFrames = 0;
@@ -159,22 +159,34 @@ namespace {
 		if (cat_walk->status == Animation::Status::WalkingDownLeft) {
 			px -= moveDistance;
 			py += moveDistance;
-			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingLeft;
+			if (py == targetYPosition) {
+				cat_walk->status = Animation::Status::StandingLeft;
+				lastDirection = 0;
+			}
 		}
 		if (cat_walk->status == Animation::Status::WalkingUpRight) {
 			px += moveDistance;
 			py -= moveDistance;
-			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingRight;
+			if (py == targetYPosition) {
+				cat_walk->status = Animation::Status::StandingRight;
+				lastDirection = 1;
+			}
 		}
 		if (cat_walk->status == Animation::Status::WalkingDownRight) {
 			px += moveDistance;
 			py += moveDistance;
-			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingRight;
+			if (py == targetYPosition) {
+				cat_walk->status = Animation::Status::StandingRight;
+				lastDirection = 1;
+			}
 		}
 		if (cat_walk->status == Animation::Status::WalkingUpLeft) {
 			px -= moveDistance;
 			py -= moveDistance;
-			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingLeft;
+			if (py == targetYPosition) {
+				cat_walk->status = Animation::Status::StandingLeft;
+				lastDirection = 0;
+			}
 		}
 
 		if (prep)
@@ -313,6 +325,14 @@ namespace {
 		Graphics4::swapBuffers();
 	}
 	
+	bool onStairs()
+	{
+		return cat_walk->status == Animation::Status::WalkingDownLeft ||
+			cat_walk->status == Animation::Status::WalkingDownRight ||
+			cat_walk->status == Animation::Status::WalkingUpLeft ||
+			cat_walk->status == Animation::Status::WalkingUpRight;
+	}
+
 	void keyDown(KeyCode code) {
 		switch (code) {
 			case KeyLeft:
@@ -334,7 +354,7 @@ namespace {
 				up = true;
 				break;
 			case KeySpace:
-				if (prep == false && jump == false && falling == false)
+				if (!onStairs() && prep == false && jump == false && falling == false)
 				{
 					prep = true;
 				}

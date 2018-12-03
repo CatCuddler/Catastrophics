@@ -95,7 +95,7 @@ void Animation::render(Kore::Graphics2::Graphics2* g2, float camX, float camY) {
 		case WalkingDownLeft:
 			//log(LogLevel::Info, "Walking down left");
 			g2->pushRotation(-angle, tileWidth / 2, tileHeight / 2);
-			g2->drawScaledSubImage(texture, animIndex * width, 0, -width, height, pos.x(), pos.y(), width, height);
+			g2->drawScaledSubImage(texture, (animIndex+1) * width, 0, -width, height, pos.x(), pos.y(), width, height);
 			g2->transformation = Kore::mat3::Identity();
 			break;
 		case WalkingUpRight:
@@ -107,7 +107,7 @@ void Animation::render(Kore::Graphics2::Graphics2* g2, float camX, float camY) {
 		case WalkingUpLeft:
 			//log(LogLevel::Info, "Walking up left");
 			g2->pushRotation(angle, tileWidth / 2, tileHeight / 2);
-			g2->drawScaledSubImage(texture, animIndex * width, 0, -width, height, pos.x(), pos.y(), width, height);
+			g2->drawScaledSubImage(texture, (animIndex +1)* width, 0, -width, height, pos.x(), pos.y(), width, height);
 			g2->transformation = Kore::mat3::Identity();
 			break;
 		}
