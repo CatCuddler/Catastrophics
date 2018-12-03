@@ -65,3 +65,8 @@ void FallingObject::render(Kore::Graphics2::Graphics2* g2, float cameraX, float 
 		g2->transformation = Kore::mat3::Identity();
 	}
 }
+
+bool FallingObject::isDroped()
+{
+	return frameCount >= maxFrameCount;
+}

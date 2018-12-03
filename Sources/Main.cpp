@@ -34,17 +34,19 @@ namespace {
 	float startHeight = -1;
 
 	int droppedObjects = 0;
-	const int maxDroppedObjects1 = 2;
+	const int maxDroppedObjects1 = 7;
 	const int maxDroppedObjects2 = 0;
 	const int maxDroppedObjects3 = 2;
 
 
 	int level = 1;
 	
+
 	const int maxFallingObjects = 50;
 	int fallingObjects = 0;
 	FallingObject** fos;
-
+	Graphics4::Texture* gameOverImage;
+	
 	Graphics2::Graphics2* g2;
 	
 	Animation* cat_walk;
@@ -105,8 +107,8 @@ namespace {
 		}
 		else if (level == 4) {
 			if (droppedObjects >= maxDroppedObjects3) {
-				//initTiles(levelName, "Tiles/bath.png");
-				log(LogLevel::Info, "TODO: Game over");
+				state = GameOverState;
+				log(LogLevel::Info, "Game over");
 				++level;
 			}
 		}
@@ -271,6 +273,7 @@ namespace {
 		cat_walk->update(playerCenter);
 		cat_jump->update(playerCenter);
 		cat_attack->update(playerCenter);
+		
 	}
 	
 	void moveGuy() {
@@ -358,12 +361,16 @@ namespace {
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			for (int i = 0; i < fallingObjects; ++i) {
 				fos[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+				if (fos[i]->isDroped())
+				{
+					++droppedObjects;
+				}
 			}
 			
 			if (level == 1) drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
-			//g2->drawImage(gameOverImage, 0, 0);
+			g2->drawImage(gameOverImage, 0, 0);
 		}
 		
 		
@@ -514,6 +521,8 @@ int kore(int argc, char** argv) {
 	font24 = Kravur::load("Fonts/arial", FontStyle(), 24);
 	font34 = Kravur::load("Fonts/arial", FontStyle(), 34);
 	font44 = Kravur::load("Fonts/arial", FontStyle(), 44);
+	
+	gameOverImage = new Graphics4::Texture("gameover.png");
 	
 	state = InGameState;
 	
