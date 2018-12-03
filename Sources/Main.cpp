@@ -9,6 +9,7 @@
 
 #include "Tileset.h"
 #include "Animation.h"
+#include "FallingObject.h"
 
 using namespace Kore;
 
@@ -34,6 +35,9 @@ namespace {
 
 	int level = 1;
 	
+	const int fallingObjects = 50;
+	//FallingObject* objects[fallingObjects];
+	FallingObject* vase;
 	Graphics2::Graphics2* g2;
 	
 	Animation* cat_walk;
@@ -311,6 +315,7 @@ namespace {
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
+			vase->render(g2, camX, camY, w * scale, h * scale);
 			bool lastDir = lastDirection == 0;
 			if (prep)
 			{
@@ -334,7 +339,9 @@ namespace {
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
+
 			droppedObjects += drop(playerCenter.x(), playerCenter.y(), jump || falling);
+			vase->update(playerCenter.x(), playerCenter.y(), jump || falling);
 			
 			if (level == 2) drawGUI();
 		} else if (state == GameOverState) {
@@ -432,6 +439,8 @@ int kore(int argc, char** argv) {
 	
 	loadNextLevel();
 	
+	vase = new FallingObject(100, 100, 168, "vase.png");
+
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
 	playerWidth = cat_walk->getWidth();
@@ -469,8 +478,7 @@ int kore(int argc, char** argv) {
 	
 	Keyboard::the()->KeyDown = keyDown;
 	Keyboard::the()->KeyUp = keyUp;
-	
-
+		
 
 	Kore::System::start();
 
