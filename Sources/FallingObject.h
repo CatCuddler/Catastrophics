@@ -12,7 +12,7 @@ struct FallingObject{
 	bool activated;
 	int frameCount;
 	int maxFrameCount;
-	float fallingSpeed = 5;
+	float fallingSpeed = 6;
 	float rotation;
 	float floorHeight;
 

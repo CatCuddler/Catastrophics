@@ -76,6 +76,7 @@ namespace {
 		
 		if (level == 1) initTiles(levelName, "Tiles/tiles.png");
 		if (level == 2) initTiles(levelName, "Tiles/kitchen.png");
+		if (level == 3) initTiles(levelName, "Tiles/bath.png");
 		++level;
 	}
 	
@@ -311,6 +312,8 @@ namespace {
 			else if (falling)
 			{
 				cat_jump->renderFrame(g2, 4, lastDir, camX, camY);
+			} else if (attack) {
+				cat_attack->render(g2, camX, camY);
 			}
 			else cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
@@ -319,7 +322,8 @@ namespace {
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			vase->update(playerCenter.x(), playerCenter.y(), jump || falling);
 
-			drawGUI();
+			
+			if (level == 1) drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
