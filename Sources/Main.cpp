@@ -469,22 +469,22 @@ int kore(int argc, char** argv) {
 	loadNextLevel();
 	fos = new FallingObject*[maxFallingObjects];
 	fos[0] = new FallingObject(552, 82, 168, "vase.png");
-	fos[1] = new FallingObject(225, 102, 168, "vase.png");
-	fos[2] = new FallingObject(395, 103, 168, "vase.png");
-	fos[3] = new FallingObject(440, 150, 168, "vase.png");
+	fos[1] = new FallingObject(225, 102, 168, "bottle_green.png"); //set
+	fos[2] = new FallingObject(415, 103, 168, "glass_cup.png"); //set move to right
+	fos[3] = new FallingObject(440, 150, 168, "bottle_green.png");
 	fos[4] = new FallingObject(587, 149, 168, "vase.png");
-	fos[5] = new FallingObject(717, 120, 168, "vase.png");
-	fos[6] = new FallingObject(718, 144, 168, "vase.png");
+	fos[5] = new FallingObject(717, 120, 168, "vase_other.png");
+	fos[6] = new FallingObject(718, 144, 168, "vase_other.png");
 	fos[7] = new FallingObject(789, 149, 168, "vase.png");
 	fos[8] = new FallingObject(884, 122, 168, "vase.png");
 
 	fos[9] = new FallingObject(12, 305, 168*2, "vase.png");
 	fos[10] = new FallingObject(278, 278, 168*2, "vase.png");
-	fos[11] = new FallingObject(310, 279, 168*2, "vase.png");
-	fos[12] = new FallingObject(436, 211, 168*2, "vase.png");
+	fos[11] = new FallingObject(310, 279, 168*2, "glass_cup.png");
+	fos[12] = new FallingObject(436, 211, 168*2, "book_red.png");
 	fos[13] = new FallingObject(512, 310, 168*2, "vase.png");
 	fos[14] = new FallingObject(594, 307, 168*2, "vase.png");
-	fos[15] = new FallingObject(605, 191, 168*2, "vase.png");
+	fos[15] = new FallingObject(605, 191, 168*2, "book_brown.png");
 	fos[16] = new FallingObject(687, 258, 168*2, "vase.png");
 	fos[17] = new FallingObject(778, 304, 168*2, "vase.png");
 	fallingObjects = 18;
