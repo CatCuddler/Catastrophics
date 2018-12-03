@@ -39,6 +39,7 @@ namespace {
 	int level = 1;
 	
 	Graphics4::Texture* gameOverImage;
+	Graphics4::Texture* introImage;
 	
 	const int fallingObjects = 50;
 	//FallingObject* objects[fallingObjects];
@@ -279,10 +280,6 @@ namespace {
 	}
 	
 	void drawGUI() {
-		g2->setFont(font14);
-		g2->setFontColor(Graphics1::Color::Black);
-		g2->setFontSize(14);
-		
 		if (helpText != nullptr) {
 			g2->drawString(helpText, 0, 0);
 		}
@@ -322,7 +319,8 @@ namespace {
 		g2->begin(false, w, h);
 		
 		if (state == TitleState) {
-			log(LogLevel::Info, "Add title screen");
+			g2->drawImage(introImage, 0, 0);
+			g2->drawString("Press enter to start the game", 0, 0);
 		} else if (state == InGameState) {
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
@@ -437,6 +435,7 @@ namespace {
 				jumpPrep = 0;
 				break;
 			case KeyReturn:
+				if (state == TitleState) state = InGameState;
 				attack = false;
 				break;
 			default:
@@ -486,9 +485,14 @@ int kore(int argc, char** argv) {
 	font34 = Kravur::load("Fonts/arial", FontStyle(), 34);
 	font44 = Kravur::load("Fonts/arial", FontStyle(), 44);
 	
-	gameOverImage = new Graphics4::Texture("gameover.png");
+	g2->setFont(font14);
+	g2->setFontColor(Graphics1::Color::Black);
+	g2->setFontSize(14);
 	
-	state = InGameState;
+	gameOverImage = new Graphics4::Texture("gameover.png");
+	introImage = new Graphics4::Texture("intro.png");
+	
+	state = TitleState;
 	
 	Keyboard::the()->KeyDown = keyDown;
 	Keyboard::the()->KeyUp = keyUp;
