@@ -69,7 +69,9 @@ namespace {
 		char levelName[20];
 		sprintf(levelName, "Tiles/level%i.csv", level);
 		log(LogLevel::Info, "Load level %i", level);
-		initTiles(levelName, "Tiles/tiles.png");
+		
+		if (level == 1) initTiles(levelName, "Tiles/tiles.png");
+		if (level == 2) initTiles(levelName, "Tiles/kitchen.png");
 		++level;
 	}
 	

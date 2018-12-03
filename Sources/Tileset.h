@@ -10,7 +10,7 @@ namespace {
 	
 	const int lightCount = 8;
 	const int spiderCountMax = 1;
-	const int dropCountMax = 2;
+	const int dropCountMax = 10;
 	const int tileWidth = 128;
 	const int tileHeight = 168;
 	const int spiderCooldownMax = 30;
