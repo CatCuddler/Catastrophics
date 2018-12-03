@@ -2,10 +2,12 @@
 <map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="8" height="2" tilewidth="128" tileheight="168" infinite="0" nextobjectid="1">
  <tileset firstgid="1" source="tiles.tsx"/>
  <tileset firstgid="143" source="tiles.tsx"/>
+ <tileset firstgid="185" source="bath.tsx"/>
+ <tileset firstgid="227" source="kitchen.tsx"/>
  <layer name="Tile Layer 1" width="8" height="2">
   <data encoding="csv">
-176,176,176,176,176,176,176,176,
-176,176,176,176,176,176,176,176
+185,202,203,204,205,207,208,213,
+186,186,186,186,186,206,211,212
 </data>
  </layer>
 </map>

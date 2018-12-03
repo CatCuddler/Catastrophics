@@ -72,6 +72,7 @@ namespace {
 		
 		if (level == 1) initTiles(levelName, "Tiles/tiles.png");
 		if (level == 2) initTiles(levelName, "Tiles/kitchen.png");
+		if (level == 3) initTiles(levelName, "Tiles/bath.png");
 		++level;
 	}
 	
