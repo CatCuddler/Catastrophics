@@ -99,7 +99,7 @@ namespace {
 			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
 		if (cat->status == Animation::Status::WalkingLeft)
 			tileID = getTileID(playerCenter.x() - tileWidth, playerCenter.y());
-		if (tileID == TableGlobus || tileID == TableAndCandles || tileID == Laptop || tileID == Candle) {
+		if (tileID == TableGlobus1 || tileID == TableAndCandles) {
 			helpText = jumpText;
 		}
 		
@@ -295,7 +295,7 @@ int kore(int argc, char** argv) {
 	loadNextLevel();
 	
 	cat = new Animation();
-	cat->init("Tiles/cat_walking_anim.png", 4, Animation::AnimationTyp::Walking);
+	cat->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
 	playerWidth = cat->getWidth();
 	playerHeight = cat->getHeight();
 	px = 0;
