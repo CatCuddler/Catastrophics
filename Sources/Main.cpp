@@ -6,7 +6,7 @@
 #include <Kore/System.h>
 #include <Kore/Log.h>
 #include <Kore/Graphics1/Color.h>
-
+#include <Kore/Input/Mouse.h>
 #include "Tileset.h"
 #include "Animation.h"
 #include "FallingObject.h"
@@ -345,6 +345,10 @@ namespace {
 			cat_walk->status == Animation::Status::WalkingUpRight;
 	}
 
+	void mousePress(int windowId, int button, int x, int y) {
+		log(LogLevel::Info, "Add game over screen");
+	}
+
 	void keyDown(KeyCode code) {
 		switch (code) {
 			case KeyLeft:
@@ -419,7 +423,7 @@ int kore(int argc, char** argv) {
 	
 	loadNextLevel();
 	
-	vase = new FallingObject(100, 100, 168, "vase.png");
+	vase = new FallingObject(400, 120, 168, "vase.png");
 
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
@@ -458,7 +462,7 @@ int kore(int argc, char** argv) {
 	
 	Keyboard::the()->KeyDown = keyDown;
 	Keyboard::the()->KeyUp = keyUp;
-		
+	Mouse::the()->Press = mousePress;
 
 	Kore::System::start();
 
