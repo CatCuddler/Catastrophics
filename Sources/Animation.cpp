@@ -54,10 +54,13 @@ float Animation::getWidth() const {
 	return width;
 }
 
-void Animation::renderFrame(Kore::Graphics2::Graphics2* g2, int frame, float camX, float camY)
+void Animation::renderFrame(Kore::Graphics2::Graphics2* g2, int frame, bool inverse, float camX, float camY)
 {
 	vec2 pos = vec2(position.x() - (width / 2) - camX, position.y() - (height / 2) - camY);
-	g2->drawScaledSubImage(texture, frame * width, 0, width, height, pos.x(), pos.y(), width, height);
+	if(inverse)
+		g2->drawScaledSubImage(texture, (frame+1) * width, 0, -width, height, pos.x(), pos.y(), width, height);
+	else
+		g2->drawScaledSubImage(texture, frame * width, 0, width, height, pos.x(), pos.y(), width, height);
 }
 
 void Animation::render(Kore::Graphics2::Graphics2* g2, float camX, float camY) {
