@@ -25,6 +25,7 @@ namespace {
 	float pushUp = 5;
 	int jumpFrames = 0;
 	int maxJumpFrames = 10;
+	float startHeight = 0;
 
 	int level = 1;
 	
@@ -76,8 +77,7 @@ namespace {
 	
 	void setCatOnTheFloor()
 	{
-		vec2 tileCenter = getTileCenterBottom(playerCenter.x(), playerCenter.y());
-		py = tileCenter.y() - playerHeight;
+		
 	}
 
 	void moveCat() {
@@ -180,8 +180,13 @@ namespace {
 
 		if (jump)
 		{
+			if (startHeight == -1)
+			{
+				startHeight = py;
+			}
 			py -= pushUp;
 			++jumpFrames;
+
 			if (jumpFrames > maxJumpFrames)
 			{
 				jumpFrames = 0;
@@ -194,11 +199,12 @@ namespace {
 		{
 			py += pushUp;
 			
-			if (py > )
+			if (py > startHeight)
 			{
-
+				py = startHeight;
+				falling = false;
+				startHeight = -1;
 			}
-
 		}
 		
 		playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
@@ -298,7 +304,8 @@ namespace {
 				up = true;
 				break;
 			case KeySpace:
-				jump = true;
+				if(falling != true)
+					jump = true;
 				break;
 			case KeyControl:
 				attack = true;
