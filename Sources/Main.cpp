@@ -30,6 +30,7 @@ namespace {
 	int maxJumpFrames = 20;
 	float startHeight = -1;
 
+	int droppedObjects = 0;
 
 	int level = 1;
 	
@@ -59,6 +60,7 @@ namespace {
 	const char* const stairsDown = "Key Down: walk the stairs down";
 	const char* const jumpText = "Key Up: jump on the table";
 	const char* const loadLevelText = "Key Up: load next level";
+	const char* const cannotLoadNextLevel = "You did not sacrificed enough objects.";
 	
 	enum GameState {
 		TitleState, InGameState, GameOverState
@@ -70,10 +72,28 @@ namespace {
 		sprintf(levelName, "Tiles/level%i.csv", level);
 		log(LogLevel::Info, "Load level %i", level);
 		
-		if (level == 1) initTiles(levelName, "Tiles/tiles.png");
-		if (level == 2) initTiles(levelName, "Tiles/kitchen.png");
-		if (level == 3) initTiles(levelName, "Tiles/bath.png");
-		++level;
+		if (level == 1) {
+			initTiles(levelName, "Tiles/tiles.png");
+			++level;
+		}
+		if (level == 2) {
+			if (droppedObjects >= 2) {
+				initTiles(levelName, "Tiles/kitchen.png");
+				++level;
+			} else {
+				helpText = cannotLoadNextLevel;
+			}
+		}
+		if (level == 3) {
+			if (droppedObjects >= 2) {
+				initTiles(levelName, "Tiles/bath.png");
+				++level;
+			} else {
+				helpText = cannotLoadNextLevel;
+			}
+		}
+		
+		droppedObjects = 0;
 	}
 	
 	void moveCatInTheMiddleOfTheTile() {
@@ -308,15 +328,15 @@ namespace {
 			{
 				cat_jump->renderFrame(g2, 4, lastDir, camX, camY);
 			} else if (attack) {
-				cat_attack->render(g2, camX, camY);
+				cat_attack->renderFrame(g2, 1, lastDir, camX, camY);
 			}
 			else cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
-			drop(playerCenter.x(), playerCenter.y(), jump || falling);
+			droppedObjects += drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			
-			if (level == 1) drawGUI();
+			if (level == 2) drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
@@ -364,7 +384,7 @@ namespace {
 					prep = true;
 				}
 				break;
-			case KeyControl:
+			case KeyReturn:
 				attack = true;
 				break;
 			default:
@@ -397,7 +417,7 @@ namespace {
 				jumpFrames = 0;
 				jumpPrep = 0;
 				break;
-			case KeyControl:
+			case KeyReturn:
 				attack = false;
 				break;
 			default:
