@@ -229,7 +229,12 @@ namespace {
 		Graphics4::clear(Graphics4::ClearColorFlag);
 		
 		float targetCamX = Kore::min(Kore::max(0.0f, playerCenter.x() - w / 2), 1.f * columns * tileWidth - w);
-		float targetCamY = playerCenter.y() - tileHeight + playerHeight / 2;//Kore::min(Kore::max(0.0f, playerCenter.y() - h / 2), 1.f * rows * tileHeight - h);
+		float targetCamY;
+		if (cat_walk->status != Animation::WalkingUpLeft && cat_walk->status != Animation::WalkingDownLeft &&
+			cat_walk->status != Animation::WalkingUpRight && cat_walk->status != Animation::WalkingDownRight)
+			targetCamY = getFloor(py) * tileHeight;
+		else
+			targetCamY = py + playerHeight - tileHeight;//Kore::min(Kore::max(0.0f, playerCenter.y() - h / 2), 1.f * rows * tileHeight - h);
 		
 		vec2 cam(camX, camY);
 		vec2 target(targetCamX, targetCamY);
