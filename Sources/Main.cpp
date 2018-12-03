@@ -38,6 +38,8 @@ namespace {
 
 	int level = 1;
 	
+	Graphics4::Texture* gameOverImage;
+	
 	const int fallingObjects = 50;
 	//FallingObject* objects[fallingObjects];
 	FallingObject* vase;
@@ -101,8 +103,8 @@ namespace {
 		}
 		else if (level == 4) {
 			if (droppedObjects >= maxDroppedObjects3) {
-				//initTiles(levelName, "Tiles/bath.png");
-				log(LogLevel::Info, "TODO: Game over");
+				state = GameOverState;
+				log(LogLevel::Info, "Game over");
 				++level;
 			}
 		}
@@ -356,7 +358,7 @@ namespace {
 			if (level == 2) drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
-			//g2->drawImage(gameOverImage, 0, 0);
+			g2->drawImage(gameOverImage, 0, 0);
 		}
 		
 		
@@ -483,6 +485,8 @@ int kore(int argc, char** argv) {
 	font24 = Kravur::load("Fonts/arial", FontStyle(), 24);
 	font34 = Kravur::load("Fonts/arial", FontStyle(), 34);
 	font44 = Kravur::load("Fonts/arial", FontStyle(), 44);
+	
+	gameOverImage = new Graphics4::Texture("gameover.png");
 	
 	state = InGameState;
 	
