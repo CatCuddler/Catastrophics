@@ -25,7 +25,7 @@ namespace {
 	float pushUp = 5;
 	int jumpFrames = 0;
 	int maxJumpFrames = 10;
-	float startHeight = 0;
+	float startHeight = -1;
 
 	int level = 1;
 	
@@ -178,29 +178,22 @@ namespace {
 			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingLeft;
 		}
 
-		if (jump)
-		{
-			if (startHeight == -1)
-			{
+		if (jump) {
+			if (startHeight == -1) {
 				startHeight = py;
 			}
 			py -= pushUp;
 			++jumpFrames;
 
-			if (jumpFrames > maxJumpFrames)
-			{
+			if (jumpFrames > maxJumpFrames) {
 				jumpFrames = 0;
 				jump = false;
 				falling = true;
 			}
-		}
-
-		if (falling)
-		{
+		} else if (falling) {
 			py += pushUp;
 			
-			if (py > startHeight)
-			{
+			if (py >= startHeight) {
 				py = startHeight;
 				falling = false;
 				startHeight = -1;
@@ -304,8 +297,7 @@ namespace {
 				up = true;
 				break;
 			case KeySpace:
-				if(falling != true)
-					jump = true;
+				if(!falling && !jump) jump = true;
 				break;
 			case KeyControl:
 				attack = true;
@@ -334,8 +326,8 @@ namespace {
 				up = false;
 				break;
 			case KeySpace:
+				if (jump) falling = true;
 				jump = false;
-				falling = true;
 				break;
 			case KeyControl:
 				attack = false;
