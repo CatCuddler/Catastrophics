@@ -311,7 +311,7 @@ namespace {
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
-			drop(playerCenter.x(), playerCenter.y());
+			drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			
 			drawGUI();
 		} else if (state == GameOverState) {

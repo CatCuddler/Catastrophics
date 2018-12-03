@@ -24,6 +24,7 @@ namespace {
 	int objectFrameCount = 0;
 	vec2i objectPositions[dropCountMax];
 	int objectState[dropCountMax];
+	bool objectCollided[dropCountMax];
 	int objectCountCurr;
 	
 	const int rows = 2;
@@ -48,6 +49,6 @@ vec2 findDoor(float lastX, float lastY);
 
 void resetSpiders();
 bool animateSpider(float px, float py);
-void drop(float px, float py);
+void drop(float px, float py, bool activate);
 
 enum TileIDLevel1 {Door = 0, /*TV = 1, Books1 = 2, Closet = 3,*/ Globus1 = 4, Globus2 = 5, Globus3 = 6, Globus4 = 7, Candles1 = 8, Candles2 = 9, Candles3 = 10, Candles4 = 11, Spider1 = 12, Spider2 = 13, Spider3 = 14, Spider4 = 15, /*Books2 = 16, Laptop = 17, Window1 = 18, Window2 = 19, PC1 = 20, PC2 = 21, Sofa = 22, Plant1 = 23, Laptop2 = 24, Plant2 = 25,*/ Stairs1 = 26, Stairs2 = 27, Stairs3 = 28, Stairs4 = 29, Stairs5 = 30, Stairs6 = 31,};
