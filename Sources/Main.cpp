@@ -283,13 +283,11 @@ namespace {
 			}
 			else if (jump)
 			{
-				//if (jumpFrames < (15))
-				//{
+				if(!left && !right)
+					cat_jump->renderFrame(g2, 0, lastDir,camX, camY);
+				else 
 					cat_jump->renderFrame(g2, 2, lastDir,camX, camY);
-				//}
-				//else {
-				//	cat_jump->renderFrame(g2, 3, lastDir,camX, camY);
-				//}
+				
 			}
 			else if (falling)
 			{
