@@ -13,6 +13,8 @@
 
 using namespace Kore;
 
+
+
 namespace {
 	const int scale = 4;
 	const int w = 128 * 2;
@@ -39,9 +41,10 @@ namespace {
 
 	int level = 1;
 	
-	const int fallingObjects = 50;
-	//FallingObject* objects[fallingObjects];
-	FallingObject* vase;
+	const int maxFallingObjects = 50;
+	int fallingObjects = 0;
+	FallingObject** fos;
+
 	Graphics2::Graphics2* g2;
 	
 	Animation* cat_walk;
@@ -326,7 +329,9 @@ namespace {
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
-			vase->render(g2, camX, camY, w * scale, h * scale);
+			for (int i = 0; i < fallingObjects; ++i) {
+				fos[i]->render(g2, camX, camY, w * scale, h * scale);
+			}
 			bool lastDir = lastDirection == 0;
 			if (prep)
 			{
@@ -344,15 +349,16 @@ namespace {
 			{
 				cat_jump->renderFrame(g2, 4, lastDir, camX, camY);
 			} else if (attack) {
-				cat_attack->render(g2, camX, camY);
+				cat_attack->renderFrame(g2, 1, lastDir, camX, camY);
 			}
 			else cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
-			vase->update(playerCenter.x(), playerCenter.y(), jump || falling);
-
+			for (int i = 0; i < fallingObjects; ++i) {
+				fos[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+			}
 			
 			if (level == 1) drawGUI();
 		} else if (state == GameOverState) {
@@ -455,9 +461,27 @@ int kore(int argc, char** argv) {
 	Kore::System::setCallback(update);
 	
 	loadNextLevel();
-	
-	vase = new FallingObject(552, 82, 168, "vase.png");
+	fos = new FallingObject*[maxFallingObjects];
+	fos[0] = new FallingObject(552, 82, 168, "vase.png");
+	fos[1] = new FallingObject(225, 102, 168, "vase.png");
+	fos[2] = new FallingObject(395, 103, 168, "vase.png");
+	fos[3] = new FallingObject(440, 150, 168, "vase.png");
+	fos[4] = new FallingObject(587, 149, 168, "vase.png");
+	fos[5] = new FallingObject(717, 120, 168, "vase.png");
+	fos[6] = new FallingObject(718, 144, 168, "vase.png");
+	fos[7] = new FallingObject(789, 149, 168, "vase.png");
+	fos[8] = new FallingObject(884, 122, 168, "vase.png");
 
+	fos[9] = new FallingObject(12, 305, 168*2, "vase.png");
+	fos[10] = new FallingObject(278, 278, 168*2, "vase.png");
+	fos[11] = new FallingObject(310, 279, 168*2, "vase.png");
+	fos[12] = new FallingObject(436, 211, 168*2, "vase.png");
+	fos[13] = new FallingObject(512, 310, 168*2, "vase.png");
+	fos[14] = new FallingObject(594, 307, 168*2, "vase.png");
+	fos[15] = new FallingObject(605, 191, 168*2, "vase.png");
+	fos[16] = new FallingObject(687, 258, 168*2, "vase.png");
+	fos[17] = new FallingObject(778, 304, 168*2, "vase.png");
+	fallingObjects = 18;
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
 	playerWidth = cat_walk->getWidth();
