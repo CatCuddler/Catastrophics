@@ -66,6 +66,7 @@ void loadCsv(const char* csvFile) {
 				assert(objectCountCurr < dropCountMax);
 				objectPositions[objectCountCurr] = vec2i(x, y);
 				objectState[objectCountCurr] = index;
+				objectCollided[objectCountCurr] = false;
 				++objectCountCurr;
 			}
 		}
@@ -124,21 +125,22 @@ bool animateSpider(float px, float py) {
 	return caughtPlayer;
 }
 
-void drop(float px, float py) {
+void drop(float px, float py, bool activate) {
 	
-	++objectFrameCount;
-	
+	objectFrameCount++;
 	bool doMove = false;
-	if (objectFrameCount >= 5) {
+	if (objectFrameCount >= 6) {
 		doMove = true;
 		objectFrameCount = 0;
 	}
-	
+
 	for (int i = 0; i < objectCountCurr; ++i) {
 		if (doMove) {
 			int collx = (objectPositions[i].x() + .5f) * tileWidth;
 			bool inRange = Kore::abs(collx - px) <= tileWidth / 4;
-			if (inRange &&
+			if (activate && inRange)
+				objectCollided[i] = true;
+			if (objectCollided[i] &&
 				((objectState[i] >= Globus1 && objectState[i] < Globus4) ||
 				(objectState[i] >= Candles1 && objectState[i] < Candles4)))
 				++objectState[i];
