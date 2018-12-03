@@ -307,6 +307,8 @@ namespace {
 			else if (falling)
 			{
 				cat_jump->renderFrame(g2, 4, lastDir, camX, camY);
+			} else if (attack) {
+				cat_attack->render(g2, camX, camY);
 			}
 			else cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
@@ -314,7 +316,7 @@ namespace {
 			animateSpider(playerCenter.x(), playerCenter.y());
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			
-			drawGUI();
+			if (level == 1) drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
