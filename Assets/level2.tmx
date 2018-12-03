@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="8" height="2" tilewidth="128" tileheight="168" infinite="0" nextobjectid="1">
  <tileset firstgid="1" source="kitchen.tsx"/>
- <tileset firstgid="17" source="tiles.tsx"/>
- <tileset firstgid="159" source="tiles.tsx"/>
+ <tileset firstgid="43" source="tiles.tsx"/>
+ <tileset firstgid="185" source="tiles.tsx"/>
  <layer name="Tile Layer 1" width="8" height="2">
   <data encoding="csv">
-1,2,3,5,5,5,5,5,
-5,5,5,5,5,1,2,3
+2,2,3,5,29,1,5,5,
+5,5,5,27,28,17,18,19
 </data>
  </layer>
 </map>
