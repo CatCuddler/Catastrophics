@@ -224,6 +224,7 @@ namespace {
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
+			animateGlobus(playerCenter.x(), playerCenter.y());
 			
 			drawGUI();
 		} else if (state == GameOverState) {

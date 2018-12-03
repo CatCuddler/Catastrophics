@@ -61,6 +61,10 @@ void loadCsv(const char* csvFile) {
 				spiderCooldownCurr[spiderCountCurr] = 0;
 				++spiderCountCurr;
 			}
+			else if (index >= TableGlobus1 && index <= TableGlobus4) {
+				globusPos = vec2i(x, y);
+				globusState = TableGlobus1;
+			}
 		}
 	}
 }
@@ -115,6 +119,26 @@ bool animateSpider(float px, float py) {
 		caughtPlayer |= (spiderState[i] >= Spider3 && Kore::abs(collx - px) < tileWidth * 0.25f && getFloor(collyMin) == getFloor(py));
 	}
 	return caughtPlayer;
+}
+
+void animateGlobus(float px, float py) {
+	++globusFrameCount;
+	
+	bool doMove = false;
+	if (globusFrameCount >= 5) {
+		doMove = true;
+		globusFrameCount = 0;
+	}
+	
+	int collx = (globusPos.x() + .5f) * tileWidth;
+	bool inRange = abs(collx - px) <= tileWidth;
+	
+	if (doMove) {
+		if (inRange && globusState < TableGlobus4)
+			++globusState;
+		source[globusPos.y() * columns  + globusPos.x()] = globusState;
+	}
+	
 }
 
 
