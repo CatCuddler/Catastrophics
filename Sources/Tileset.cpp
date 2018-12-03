@@ -131,7 +131,7 @@ void animateGlobus(float px, float py) {
 	}
 	
 	int collx = (globusPos.x() + .5f) * tileWidth;
-	bool inRange = abs(collx - px) <= tileWidth / 4;
+	bool inRange = Kore::abs(collx - px) <= tileWidth / 4;
 	
 	if (doMove) {
 		if (inRange && globusState < TableGlobus4)

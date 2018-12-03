@@ -22,6 +22,10 @@ namespace {
 	float camX = 0;
 	float camY = 0;
 	
+	float pushUp = 5;
+	int jumpFrames = 0;
+	int maxJumpFrames = 10;
+
 	int level = 1;
 	
 	Graphics2::Graphics2* g2;
@@ -38,7 +42,7 @@ namespace {
 	vec2 guyPosition;
 	
 	int lastDirection = 1;	// 0 - left, 1 - right
-	bool left, right, up, down, jump, attack;
+	bool left, right, up, down, jump, falling, attack;
 	
 	Kravur* font14;
 	Kravur* font24;
@@ -70,10 +74,16 @@ namespace {
 		py = tileCenter.y() - playerHeight;
 	}
 	
+	void setCatOnTheFloor()
+	{
+		vec2 tileCenter = getTileCenterBottom(playerCenter.x(), playerCenter.y());
+		py = tileCenter.y() - playerHeight;
+	}
+
 	void moveCat() {
 		int tileID = getTileID(playerCenter.x(), playerCenter.y());
 		//log(LogLevel::Info, "%i", tileID);
-		
+
 		helpText = nullptr;
 		if (tileID == Stairs3) {
 			//log(LogLevel::Info, "walk downstairs -> left");
@@ -96,6 +106,8 @@ namespace {
 			helpText = loadLevelText;
 		}
 		
+
+
 		// Check if the cat can jump on the table
 		if (cat_walk->status == Animation::Status::WalkingRight)
 			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
@@ -164,6 +176,24 @@ namespace {
 			px -= moveDistance;
 			py -= moveDistance;
 			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingLeft;
+		}
+
+		if (jump)
+		{
+			py -= pushUp;
+			++jumpFrames;
+			if (jumpFrames > maxJumpFrames)
+			{
+				jumpFrames = 0;
+				jump = false;
+				falling = true;
+			}
+		}
+
+		if (falling)
+		{
+
+
 		}
 		
 		playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
@@ -293,6 +323,7 @@ namespace {
 				break;
 			case KeySpace:
 				jump = false;
+				falling = true;
 				break;
 			case KeyControl:
 				attack = false;
