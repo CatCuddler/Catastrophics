@@ -31,7 +31,6 @@ namespace {
 	int maxJumpFrames = 20;
 	float startHeight = -1;
 
-	int droppedObjects = 0;
 
 	int level = 1;
 	
@@ -64,7 +63,6 @@ namespace {
 	const char* const stairsDown = "Key Down: walk the stairs down";
 	const char* const jumpText = "Key Up: jump on the table";
 	const char* const loadLevelText = "Key Up: load next level";
-	const char* const cannotLoadNextLevel = "You did not sacrificed enough objects.";
 	
 	enum GameState {
 		TitleState, InGameState, GameOverState
@@ -76,28 +74,10 @@ namespace {
 		sprintf(levelName, "Tiles/level%i.csv", level);
 		log(LogLevel::Info, "Load level %i", level);
 		
-		if (level == 1) {
-			initTiles(levelName, "Tiles/tiles.png");
-			++level;
-		}
-		if (level == 2) {
-			if (droppedObjects >= 2) {
-				initTiles(levelName, "Tiles/kitchen.png");
-				++level;
-			} else {
-				helpText = cannotLoadNextLevel;
-			}
-		}
-		if (level == 3) {
-			if (droppedObjects >= 2) {
-				initTiles(levelName, "Tiles/bath.png");
-				++level;
-			} else {
-				helpText = cannotLoadNextLevel;
-			}
-		}
-		
-		droppedObjects = 0;
+		if (level == 1) initTiles(levelName, "Tiles/tiles.png");
+		if (level == 2) initTiles(levelName, "Tiles/kitchen.png");
+		if (level == 3) initTiles(levelName, "Tiles/bath.png");
+		++level;
 	}
 	
 	void moveCatInTheMiddleOfTheTile() {
@@ -333,17 +313,17 @@ namespace {
 			{
 				cat_jump->renderFrame(g2, 4, lastDir, camX, camY);
 			} else if (attack) {
-				cat_attack->renderFrame(g2, 1, lastDir, camX, camY);
+				cat_attack->render(g2, camX, camY);
 			}
 			else cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
-
-			droppedObjects += drop(playerCenter.x(), playerCenter.y(), jump || falling);
+			drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			vase->update(playerCenter.x(), playerCenter.y(), jump || falling);
+
 			
-			if (level == 2) drawGUI();
+			if (level == 1) drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			//g2->drawImage(gameOverImage, 0, 0);
@@ -366,7 +346,9 @@ namespace {
 	}
 
 	void mousePress(int windowId, int button, int x, int y) {
-		log(LogLevel::Info, "Add game over screen");
+		int posX = camX + x;
+		int posY = camY + y;
+		log(LogLevel::Info, "x: %i , y: %i", posX , posY);
 	}
 
 	void keyDown(KeyCode code) {
@@ -443,7 +425,7 @@ int kore(int argc, char** argv) {
 	
 	loadNextLevel();
 	
-	vase = new FallingObject(400, 120, 168, "vase.png");
+	vase = new FallingObject(552, 82, 168, "vase.png");
 
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);

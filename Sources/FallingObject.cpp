@@ -3,9 +3,9 @@
 FallingObject::FallingObject(float x, float y, float floorHeight, const char* texName)
 {
 	Kore::Graphics4::Texture* tex = new Kore::Graphics4::Texture(texName);
-	this->position = Kore::vec2(x, y);
 	this->width = tex->width;
 	this->height = tex->height;
+	this->position = Kore::vec2(x, y * 1.12f - height);
 	this->tex = tex;
 	this->activated = false;
 	this->frameCount = 0;
