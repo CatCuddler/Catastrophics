@@ -55,14 +55,14 @@ void loadCsv(const char* csvFile) {
 				doors[doorCount] = vec2(x * tileWidth, y * tileHeight);
 				++doorCount;
 			}
-			else if (index >= Spider1 && index <= Spider8) {
+			else if (index >= Spider1 && index <= Spider4) {
 				assert(spiderCountCurr < spiderCountMax);
 				spiderPos[spiderCountCurr] = vec2i(x, y);
 				spiderState[spiderCountCurr] = Spider1;
 				spiderCooldownCurr[spiderCountCurr] = 0;
 				++spiderCountCurr;
 			}
-			else if (index == TableGlobus1 || index == TableAndCandles1) {
+			else if (index == Globus1 || index == Candles1) {
 				assert(objectCountCurr < dropCountMax);
 				objectPositions[objectCountCurr] = vec2i(x, y);
 				objectState[objectCountCurr] = index;
@@ -113,7 +113,7 @@ bool animateSpider(float px, float py) {
 		if (doMove) {
 			bool inRange = Kore::abs(collx - px) <= tileWidth;
 			bool active = inRange ;
-			if (active && spiderState[i] < Spider8 && spiderCooldownCurr[i] <= 0)
+			if (active && spiderState[i] < Spider4 && spiderCooldownCurr[i] <= 0)
 				++spiderState[i];
 			else if (!active && spiderState[i] > Spider1)
 				--spiderState[i];
@@ -139,8 +139,8 @@ void drop(float px, float py) {
 			int collx = (objectPositions[i].x() + .5f) * tileWidth;
 			bool inRange = Kore::abs(collx - px) <= tileWidth / 4;
 			if (inRange &&
-				((objectState[i] >= TableGlobus1 && objectState[i] < TableGlobus4) ||
-				(objectState[i] >= TableAndCandles1 && objectState[i] < TableAndCandles4)))
+				((objectState[i] >= Globus1 && objectState[i] < Globus4) ||
+				(objectState[i] >= Candles1 && objectState[i] < Candles4)))
 				++objectState[i];
 			source[objectPositions[i].y() * columns + objectPositions[i].x()] = objectState[i];
 		}

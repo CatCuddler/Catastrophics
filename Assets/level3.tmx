@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="8" height="2" tilewidth="128" tileheight="168" infinite="0" nextobjectid="1">
  <tileset firstgid="1" source="tiles.tsx"/>
+ <tileset firstgid="143" source="tiles.tsx"/>
  <layer name="Tile Layer 1" width="8" height="2">
   <data encoding="csv">
-24,24,24,24,24,24,24,24,
-24,24,24,24,24,24,24,24
+176,176,176,176,176,176,176,176,
+176,176,176,176,176,176,176,176
 </data>
  </layer>
 </map>
