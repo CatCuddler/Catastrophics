@@ -32,6 +32,9 @@ namespace {
 	float startHeight = -1;
 
 	int droppedObjects = 0;
+	const int maxDroppedObjects1 = 2;
+	const int maxDroppedObjects2 = 0;
+	const int maxDroppedObjects3 = 2;
 
 	int level = 1;
 	
@@ -74,26 +77,33 @@ namespace {
 	void loadNextLevel() {
 		char levelName[20];
 		sprintf(levelName, "Tiles/level%i.csv", level);
-		log(LogLevel::Info, "Load level %i", level);
 		
 		if (level == 1) {
+			log(LogLevel::Info, "Load level %i", level);
 			initTiles(levelName, "Tiles/tiles.png");
 			++level;
 		}
-		if (level == 2) {
-			if (droppedObjects >= 2) {
+		else if (level == 2) {
+			if (droppedObjects >= maxDroppedObjects1) {
+				log(LogLevel::Info, "Load level %i", level);
 				initTiles(levelName, "Tiles/kitchen.png");
 				++level;
 			} else {
 				helpText = cannotLoadNextLevel;
 			}
 		}
-		if (level == 3) {
-			if (droppedObjects >= 2) {
+		else if (level == 3) {
+			if (droppedObjects >= maxDroppedObjects2) {
+				log(LogLevel::Info, "Load level %i", level);
 				initTiles(levelName, "Tiles/bath.png");
 				++level;
-			} else {
-				helpText = cannotLoadNextLevel;
+			}
+		}
+		else if (level == 4) {
+			if (droppedObjects >= maxDroppedObjects3) {
+				//initTiles(levelName, "Tiles/bath.png");
+				log(LogLevel::Info, "TODO: Game over");
+				++level;
 			}
 		}
 		
