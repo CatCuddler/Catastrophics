@@ -128,7 +128,7 @@ bool animateSpider(float px, float py) {
 		int collyMin = spiderPos[i].y() * tileHeight + 9 + (spiderState[i] - Spider1) * 11;
 		spiderCooldownCurr[i] -= 1;
 		if (doMove) {
-			bool inRange = abs(collx - px) <= tileWidth;
+			bool inRange = Kore::abs(collx - px) <= tileWidth;
 			bool active = inRange ;
 			if (active && spiderState[i] < Spider8 && spiderCooldownCurr[i] <= 0)
 				++spiderState[i];

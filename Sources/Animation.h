@@ -6,11 +6,12 @@
 class Animation {
 public:
 	enum AnimationTyp {
-		Sitting, Walking
+		Sitting, Walking,Jumping, Attacking
 	} animationTyp;
 	
 	enum Status {
-		WalkingLeft, WalkingRight, StandingLeft, StandingRight, WalkingDownRight, WalkingUpRight, WalkingDownLeft, WalkingUpLeft
+		WalkingLeft, WalkingRight, StandingLeft, StandingRight, WalkingDownRight, WalkingUpRight, WalkingDownLeft, WalkingUpLeft,
+		JumpingLeft, JumpingRight, AttackingLeft, AttackingRight
 	} status;
 	
 	Animation();

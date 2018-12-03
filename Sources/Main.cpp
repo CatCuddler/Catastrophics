@@ -26,7 +26,9 @@ namespace {
 	
 	Graphics2::Graphics2* g2;
 	
-	Animation* cat;
+	Animation* cat_walk;
+	Animation* cat_jump;
+	Animation* cat_attack;
 	vec2 playerCenter;
 	float playerWidth, playerHeight;
 	
@@ -36,7 +38,7 @@ namespace {
 	vec2 guyPosition;
 	
 	int lastDirection = 1;	// 0 - left, 1 - right
-	bool left, right, up, down;
+	bool left, right, up, down, jump, attack;
 	
 	Kravur* font14;
 	Kravur* font24;
@@ -95,9 +97,9 @@ namespace {
 		}
 		
 		// Check if the cat can jump on the table
-		if (cat->status == Animation::Status::WalkingRight)
+		if (cat_walk->status == Animation::Status::WalkingRight)
 			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
-		if (cat->status == Animation::Status::WalkingLeft)
+		if (cat_walk->status == Animation::Status::WalkingLeft)
 			tileID = getTileID(playerCenter.x() - tileWidth, playerCenter.y());
 		if (tileID == TableGlobus || tileID == TableAndCandles || tileID == Laptop || tileID == Candle) {
 			helpText = jumpText;
@@ -105,25 +107,25 @@ namespace {
 		
 		float moveDistance = 4;
 		
-		if (cat->status != Animation::Status::WalkingDownLeft && cat->status != Animation::Status::WalkingDownRight &&
-			cat->status != Animation::Status::WalkingUpLeft && cat->status != Animation::Status::WalkingUpRight) {
+		if (cat_walk->status != Animation::Status::WalkingDownLeft && cat_walk->status != Animation::Status::WalkingDownRight &&
+			cat_walk->status != Animation::Status::WalkingUpLeft && cat_walk->status != Animation::Status::WalkingUpRight) {
 			if (left && px >= -10) {
 				px -= moveDistance;
-				cat->status = Animation::Status::WalkingLeft;
+				cat_walk->status = Animation::Status::WalkingLeft;
 			} else if (right && px <= columns * tileWidth - playerWidth + 10) {
 				px += moveDistance;
-				cat->status = Animation::Status::WalkingRight;
+				cat_walk->status = Animation::Status::WalkingRight;
 			} else if (up /*&& py >= tileHeight - playerHeight + moveDistance*/) {
 				if (tileID == Stairs1) {
 					moveCatInTheMiddleOfTheTile();
 					targetYPosition = py - tileHeight;
-					cat->status = Animation::Status::WalkingUpRight;
+					cat_walk->status = Animation::Status::WalkingUpRight;
 				}
 				if (tileID >= Stairs6) {
 					moveCatInTheMiddleOfTheTile();
 					px += 50;
 					targetYPosition = py - tileHeight;
-					cat->status = Animation::Status::WalkingUpLeft;
+					cat_walk->status = Animation::Status::WalkingUpLeft;
 				}
 				if (tileID == Door) {
 					loadNextLevel();
@@ -132,40 +134,40 @@ namespace {
 				if (tileID == Stairs3) {
 					moveCatInTheMiddleOfTheTile();
 					targetYPosition = py + tileHeight;
-					cat->status = Animation::Status::WalkingDownLeft;
+					cat_walk->status = Animation::Status::WalkingDownLeft;
 				}
 				if (tileID == Stairs4) {
 					moveCatInTheMiddleOfTheTile();
 					targetYPosition = py + tileHeight;
-					cat->status = Animation::Status::WalkingDownRight;
+					cat_walk->status = Animation::Status::WalkingDownRight;
 				}
 			}
 		}
 		//log(LogLevel::Info, "%f %f", playerPosition.x(), playerPosition.y());
 		
-		if (cat->status == Animation::Status::WalkingDownLeft) {
+		if (cat_walk->status == Animation::Status::WalkingDownLeft) {
 			px -= moveDistance;
 			py += moveDistance;
-			if (py == targetYPosition) cat->status = Animation::Status::StandingLeft;
+			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingLeft;
 		}
-		if (cat->status == Animation::Status::WalkingUpRight) {
+		if (cat_walk->status == Animation::Status::WalkingUpRight) {
 			px += moveDistance;
 			py -= moveDistance;
-			if (py == targetYPosition) cat->status = Animation::Status::StandingRight;
+			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingRight;
 		}
-		if (cat->status == Animation::Status::WalkingDownRight) {
+		if (cat_walk->status == Animation::Status::WalkingDownRight) {
 			px += moveDistance;
 			py += moveDistance;
-			if (py == targetYPosition) cat->status = Animation::Status::StandingRight;
+			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingRight;
 		}
-		if (cat->status == Animation::Status::WalkingUpLeft) {
+		if (cat_walk->status == Animation::Status::WalkingUpLeft) {
 			px -= moveDistance;
 			py -= moveDistance;
-			if (py == targetYPosition) cat->status = Animation::Status::StandingLeft;
+			if (py == targetYPosition) cat_walk->status = Animation::Status::StandingLeft;
 		}
 		
 		playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
-		cat->update(playerCenter);
+		cat_walk->update(playerCenter);
 	}
 	
 	void moveGuy() {
@@ -220,7 +222,7 @@ namespace {
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
 			
-			cat->render(g2, camX, camY);
+			cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
@@ -259,6 +261,12 @@ namespace {
 			case KeyW:
 				up = true;
 				break;
+			case KeySpace:
+				jump = true;
+				break;
+			case KeyControl:
+				attack = true;
+				break;
 			default:
 				break;
 		}
@@ -282,6 +290,12 @@ namespace {
 			case KeyW:
 				up = false;
 				break;
+			case KeySpace:
+				jump = false;
+				break;
+			case KeyControl:
+				attack = false;
+				break;
 			default:
 				break;
 		}
@@ -294,10 +308,14 @@ int kore(int argc, char** argv) {
 	
 	loadNextLevel();
 	
-	cat = new Animation();
-	cat->init("Tiles/cat_walking_anim.png", 4, Animation::AnimationTyp::Walking);
-	playerWidth = cat->getWidth();
-	playerHeight = cat->getHeight();
+	cat_walk = new Animation();
+	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
+	playerWidth = cat_walk->getWidth();
+	playerHeight = cat_walk->getHeight();
+	cat_jump = new Animation();
+	cat_jump->init("Tiles/cat_jumping_anim.png", 2, Animation::AnimationTyp::Jumping);
+	cat_attack = new Animation();
+	cat_attack->init("Tiles/cat_attack_anim.png", 2, Animation::AnimationTyp::Attacking);
 	px = 0;
 	py = tileHeight - playerHeight;
 	playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);
@@ -307,12 +325,14 @@ int kore(int argc, char** argv) {
 	guy->init("Tiles/player.png", 9, Animation::AnimationTyp::Walking);
 	
 	g2 = new Graphics2::Graphics2(w, h, false);
-	
+	g2->setImageScaleQuality(Graphics2::Low);
 	left = false;
 	right = false;
 	up = false;
 	down = false;
-	
+	jump = false;
+	attack = false;
+
 	font14 = Kravur::load("Fonts/arial", FontStyle(), 14);
 	font24 = Kravur::load("Fonts/arial", FontStyle(), 24);
 	font34 = Kravur::load("Fonts/arial", FontStyle(), 34);
@@ -323,6 +343,8 @@ int kore(int argc, char** argv) {
 	Keyboard::the()->KeyDown = keyDown;
 	Keyboard::the()->KeyUp = keyUp;
 	
+
+
 	Kore::System::start();
 
 	return 0;
