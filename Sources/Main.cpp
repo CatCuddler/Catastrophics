@@ -101,7 +101,7 @@ namespace {
 			tileID = getTileID(playerCenter.x() + tileWidth, playerCenter.y());
 		if (cat_walk->status == Animation::Status::WalkingLeft)
 			tileID = getTileID(playerCenter.x() - tileWidth, playerCenter.y());
-		if (tileID == TableGlobus || tileID == TableAndCandles || tileID == Laptop || tileID == Candle) {
+		if (tileID == TableGlobus1 || tileID == TableAndCandles) {
 			helpText = jumpText;
 		}
 		
@@ -226,6 +226,7 @@ namespace {
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
+			animateGlobus(playerCenter.x(), playerCenter.y());
 			
 			drawGUI();
 		} else if (state == GameOverState) {
@@ -316,6 +317,7 @@ int kore(int argc, char** argv) {
 	cat_jump->init("Tiles/cat_jumping_anim.png", 2, Animation::AnimationTyp::Jumping);
 	cat_attack = new Animation();
 	cat_attack->init("Tiles/cat_attack_anim.png", 2, Animation::AnimationTyp::Attacking);
+
 	px = 0;
 	py = tileHeight - playerHeight;
 	playerCenter = vec3(px + playerWidth / 2, py + playerHeight / 2);

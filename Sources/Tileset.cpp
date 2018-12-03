@@ -61,30 +61,10 @@ void loadCsv(const char* csvFile) {
 				spiderCooldownCurr[spiderCountCurr] = 0;
 				++spiderCountCurr;
 			}
-		}
-	}
-	shuffleDoors();
-}
-
-void shuffleDoors() {
-	// Shuffle floors
-	for (int i = 1; i < rows * 2; ++i) {
-		int r = Random::get(1, rows - 2);
-		int r2 = Random::get(1, rows - 2);
-		vec2 t1 = doors[1 + (r - 1) * 2];
-		vec2 t2 = doors[2 + (r - 1) * 2];
-		doors[1 + (r - 1) * 2] = doors[1 + (r2 - 1) * 2];
-		doors[2 + (r - 1) * 2] = doors[2 + (r2 - 1) * 2];
-		doors[1 + (r2 - 1) * 2] = t1;
-		doors[2 + (r2 - 1) * 2] = t2;
-	}
-
-	// Flip floors
-	for (int r = 1; r < rows - 1; ++r) {
-		if (Random::get(0, 1)) {
-			vec2 t1 = doors[1 + (r - 1) * 2];
-			doors[1 + (r - 1) * 2] = doors[2 + (r - 1) * 2];
-			doors[2 + (r - 1) * 2] = t1;
+			else if (index >= TableGlobus1 && index <= TableGlobus4) {
+				globusPos = vec2i(x, y);
+				globusState = TableGlobus1;
+			}
 		}
 	}
 }
@@ -139,6 +119,26 @@ bool animateSpider(float px, float py) {
 		caughtPlayer |= (spiderState[i] >= Spider3 && Kore::abs(collx - px) < tileWidth * 0.25f && getFloor(collyMin) == getFloor(py));
 	}
 	return caughtPlayer;
+}
+
+void animateGlobus(float px, float py) {
+	++globusFrameCount;
+	
+	bool doMove = false;
+	if (globusFrameCount >= 5) {
+		doMove = true;
+		globusFrameCount = 0;
+	}
+	
+	int collx = (globusPos.x() + .5f) * tileWidth;
+	bool inRange = abs(collx - px) <= tileWidth;
+	
+	if (doMove) {
+		if (inRange && globusState < TableGlobus4)
+			++globusState;
+		source[globusPos.y() * columns  + globusPos.x()] = globusState;
+	}
+	
 }
 
 
