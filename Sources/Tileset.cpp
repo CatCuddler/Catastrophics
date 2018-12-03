@@ -125,7 +125,9 @@ bool animateSpider(float px, float py) {
 	return caughtPlayer;
 }
 
-void drop(float px, float py, bool activate) {
+bool drop(float px, float py, bool activate) {
+	
+	bool fall = false;
 	
 	objectFrameCount++;
 	bool doMove = false;
@@ -142,11 +144,14 @@ void drop(float px, float py, bool activate) {
 				objectCollided[i] = true;
 			if (objectCollided[i] &&
 				((objectState[i] >= Globus1 && objectState[i] < Globus4) ||
-				(objectState[i] >= Candles1 && objectState[i] < Candles4)))
-				++objectState[i];
+				 (objectState[i] >= Candles1 && objectState[i] < Candles4))) {
+					++objectState[i];
+					fall = true;
+			}
 			source[objectPositions[i].y() * columns + objectPositions[i].x()] = objectState[i];
 		}
 	}
+	return fall;
 }
 
 int getFloor(float py) {
