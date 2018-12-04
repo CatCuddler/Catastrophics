@@ -39,9 +39,9 @@ namespace {
 	float startHeight = -1;
 
 	int droppedObjects = 0;
-	const int maxDroppedObjects1 = 7;
+	const int maxDroppedObjects1 = 18;
 	const int maxDroppedObjects2 = 0;
-	const int maxDroppedObjects3 = 3;
+	const int maxDroppedObjects3 = 8;
 	
 	int level = 1;
 	
