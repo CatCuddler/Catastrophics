@@ -44,7 +44,9 @@ namespace {
 
 	const int maxFallingObjects = 50;
 	int fallingObjects = 0;
-	FallingObject** fos;
+	FallingObject** fos0;
+	FallingObject** fos1;
+	FallingObject** fos2;
 	Graphics4::Texture* gameOverImage;
 	Graphics4::Texture* introImage;
 	
@@ -331,7 +333,7 @@ namespace {
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
 			for (int i = 0; i < fallingObjects; ++i) {
-				fos[i]->render(g2, camX, camY, w * scale, h * scale);
+				fos0[i]->render(g2, camX, camY, w * scale, h * scale);
 			}
 			bool lastDir = lastDirection == 0;
 			if (prep)
@@ -358,8 +360,8 @@ namespace {
 			animateSpider(playerCenter.x(), playerCenter.y());
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			for (int i = 0; i < fallingObjects; ++i) {
-				fos[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
-				if (fos[i]->isDroped())
+				fos0[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+				if (fos0[i]->isDroped())
 				{
 					++droppedObjects;
 				}
@@ -467,32 +469,38 @@ int kore(int argc, char** argv) {
 	Kore::System::setCallback(update);
 	
 	loadNextLevel();
-	fos = new FallingObject*[maxFallingObjects];
-	fos[1] = new FallingObject(225, 100, 168, "bottle_green.png"); //check
-	fos[18] = new FallingObject(280, 100, 168, "books2.png"); //check
-	fos[21] = new FallingObject(333, 100, 168, "candles.png"); //chandalier here
-	fos[2] = new FallingObject(420, 100, 168, "glass_cup.png"); //chek
-	fos[5] = new FallingObject(448, 100, 168, "mug.png"); //check
-	fos[3] = new FallingObject(450, 149, 168, "bottle.png");
-	fos[20] = new FallingObject(538, 82, 168, "books3.png"); //check
-	fos[0] = new FallingObject(552, 82, 168, "vase.png"); //check
-	fos[4] = new FallingObject(587, 149, 168, "vase.png"); //change me !!!
-	fos[19] = new FallingObject(610, 83, 168, "books.png");//check
-	fos[7] = new FallingObject(784, 140, 168, "vase.png"); //change me !!!
-	fos[6] = new FallingObject(808, 100, 168, "mug2.png"); // check
-	fos[8] = new FallingObject(874, 100, 168, "walkytalky.png"); //chek
 
+	fos0 = new FallingObject*[maxFallingObjects];
+	fos0[1] = new FallingObject(225, 100, 168, "bottle_green.png"); //check
+	fos0[18] = new FallingObject(280, 100, 168, "books2.png"); //check
+	fos0[21] = new FallingObject(333, 100, 168, "candles.png"); //chandalier here
+	fos0[2] = new FallingObject(420, 100, 168, "glass_cup.png"); //chek
+	fos0[5] = new FallingObject(448, 100, 168, "mug.png"); //check
+	fos0[3] = new FallingObject(450, 149, 168, "bottle.png"); //check
+	fos0[20] = new FallingObject(538, 82, 168, "books3.png"); //check
+	fos0[0] = new FallingObject(552, 82, 168, "vase.png"); //check
+	fos0[4] = new FallingObject(587, 149, 168, "bottle_green.png"); //check
+	fos0[19] = new FallingObject(610, 83, 168, "books.png");//check
+	fos0[7] = new FallingObject(783, 141, 168, "book_red.png"); //check
+	fos0[23] = new FallingObject(776, 140, 168, "book_red.png"); //check
+	fos0[24] = new FallingObject(776, 117, 168, "book_brown.png"); //check
+	fos0[25] = new FallingObject(783, 118, 168, "book_brown.png"); //check
+	fos0[6] = new FallingObject(808, 100, 168, "mug2.png"); // check
+	fos0[8] = new FallingObject(874, 100, 168, "walkytalky.png"); //chek
+	fos0[22] = new FallingObject(972, 120, 168, "ducks_middle.png"); //chek
 
-	fos[9] = new FallingObject(12, 305, 168*2, "vase.png");
-	fos[10] = new FallingObject(278, 278, 168*2, "vase.png");
-	fos[11] = new FallingObject(310, 279, 168*2, "glass_cup.png");
-	fos[12] = new FallingObject(436, 211, 168*2, "book_red.png");
-	fos[13] = new FallingObject(512, 310, 168*2, "books.png");
-	fos[14] = new FallingObject(594, 307, 168*2, "books2.png");
-	fos[15] = new FallingObject(605, 191, 168*2, "book_brown.png");
-	fos[16] = new FallingObject(687, 258, 168*2, "lamp.png");
-	fos[17] = new FallingObject(778, 304, 168*2, "vase.png");
-	fallingObjects = 22;
+	fos0[9] = new FallingObject(12, 305, 168*2, "vase.png");
+	fos0[10] = new FallingObject(278, 278, 168*2, "vase.png");
+	fos0[11] = new FallingObject(310, 279, 168*2, "glass_cup.png");
+	fos0[12] = new FallingObject(436, 211, 168*2, "book_red.png");
+	fos0[13] = new FallingObject(512, 310, 168*2, "books.png");
+	fos0[14] = new FallingObject(594, 307, 168*2, "books2.png");
+	fos0[15] = new FallingObject(605, 191, 168*2, "book_brown.png");
+	fos0[16] = new FallingObject(687, 258, 168*2, "lamp.png");
+	fos0[17] = new FallingObject(778, 304, 168*2, "vase.png");
+	
+	
+	fallingObjects = 26;
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
 	playerWidth = cat_walk->getWidth();
