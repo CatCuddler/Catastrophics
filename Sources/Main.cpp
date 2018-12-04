@@ -334,89 +334,56 @@ namespace {
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
-				if (level == 1 + 1) 
-				for (int i = 0; i < fallingObjects0; ++i) {
-					fos0[i]->render(g2, camX, camY, w * scale, h * scale);
-				}
-				if (level == 2 + 1) 
-				for (int i = 0; i < fallingObjects1; ++i) {
-					fos1[i]->render(g2, camX, camY, w * scale, h * scale);
-				}
-				if (level == 3 + 1) 
-				for (int i = 0; i < fallingObjects1; ++i) {
-					fos2[i]->render(g2, camX, camY, w * scale, h * scale);
-				}
+			if (level == 1 + 1) {
+				for (int i = 0; i < fallingObjects0; ++i) fos0[i]->render(g2, camX, camY, w * scale, h * scale);
+			}
+			if (level == 2 + 1) {
+				for (int i = 0; i < fallingObjects1; ++i) fos1[i]->render(g2, camX, camY, w * scale, h * scale);
+			}
+			if (level == 3 + 1) {
+				for (int i = 0; i < fallingObjects1; ++i) fos2[i]->render(g2, camX, camY, w * scale, h * scale);
+			}
 			
 			bool lastDir = lastDirection == 0;
-			if (prep)
-			{
+			if (prep) {
 				cat_jump->renderFrame(g2, 1, lastDir, camX, camY);
-			}
-			else if (jump)
-			{
-				if(!left && !right)
-					cat_jump->renderFrame(g2, 0, lastDir,camX, camY);
-				else 
-					cat_jump->renderFrame(g2, 2, lastDir,camX, camY);
-				
-			}
-			else if (falling)
-			{
+			} else if (jump) {
+				if (!left && !right) cat_jump->renderFrame(g2, 0, lastDir,camX, camY);
+				else cat_jump->renderFrame(g2, 2, lastDir,camX, camY);
+			} else if (falling) {
 				cat_jump->renderFrame(g2, 4, lastDir, camX, camY);
 			} else if (attack) {
 				cat_attack->renderFrame(g2, 1, lastDir, camX, camY);
-			}
-			else cat_walk->render(g2, camX, camY);
+			} else cat_walk->render(g2, camX, camY);
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
 			
-			if (level == 1 + 1) 
-			for (int i = 0; i < fallingObjects0; ++i) {
-					if (attack)
-					{
-						fos0[i]->update(playerCenter.x(), playerCenter.y() + 20, true);
-					}
+			if (level == 1 + 1) {
+				for (int i = 0; i < fallingObjects0; ++i) {
+					if (attack) fos0[i]->update(playerCenter.x(), playerCenter.y() + 20, true);
 					else fos0[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
-					if (fos0[i]->isDroped())
-					{
-						++droppedObjects;
-					}
-			}
-			else if (level == 2 + 1) {
+					if (fos0[i]->isDroped()) ++droppedObjects;
+				}
+			} else if (level == 2 + 1) {
 				for (int i = 0; i < fallingObjects1; ++i) {
-					if (attack)
-					{
-						fos1[i]->update(playerCenter.x(), playerCenter.y() + 20, true);
-					}
+					if (attack) fos1[i]->update(playerCenter.x(), playerCenter.y() + 20, true);
 					else fos1[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
-					if (fos1[i]->isDroped())
-					{
-						++droppedObjects;
-					}
+					if (fos1[i]->isDroped()) ++droppedObjects;
 				}
-			}else if (level == 3 + 1) {
+			} else if (level == 3 + 1) {
 				for (int i = 0; i < fallingObjects2; ++i) {
-					if (attack)
-					{
-						fos2[i]->update(playerCenter.x(), playerCenter.y()+20, true);
-					}else fos2[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
-					if (fos2[i]->isDroped())
-					{
-						++droppedObjects;
-					}
+					if (attack) fos2[i]->update(playerCenter.x(), playerCenter.y()+20, true);
+					else fos2[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+					if (fos2[i]->isDroped()) ++droppedObjects;
 				}
 			}
-			
 			if (level == 1) drawGUI();
-			else if (state == GameOverState) {
-				log(LogLevel::Info, "Add game over screen");
-				g2->drawImage(gameOverImage, 0, 0);
-			}
 		}
-		
-		
+		else if (state == GameOverState) {
+			g2->drawImage(gameOverImage, 0, 0);
+		}
 		
 		g2->end();
 
