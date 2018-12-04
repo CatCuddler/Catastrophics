@@ -342,7 +342,7 @@ namespace {
 				for (int i = 0; i < fallingObjects1; ++i) fos1[i]->render(g2, camX, camY, w * scale, h * scale);
 			}
 			if (level == 3 + 1) {
-				for (int i = 0; i < fallingObjects1; ++i) fos2[i]->render(g2, camX, camY, w * scale, h * scale);
+				for (int i = 0; i < fallingObjects2; ++i) fos2[i]->render(g2, camX, camY, w * scale, h * scale);
 			}
 
 			
