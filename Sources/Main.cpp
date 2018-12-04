@@ -7,6 +7,11 @@
 #include <Kore/Log.h>
 #include <Kore/Graphics1/Color.h>
 #include <Kore/Input/Mouse.h>
+#include <Kore/Audio2/Audio.h>
+#include <Kore/Audio1/Audio.h>
+#include <Kore/Audio1/Sound.h>
+#include <Kore/Audio1/SoundStream.h>
+
 #include "Tileset.h"
 #include "Animation.h"
 #include "FallingObject.h"
@@ -37,11 +42,11 @@ namespace {
 	const int maxDroppedObjects1 = 7;
 	const int maxDroppedObjects2 = 0;
 	const int maxDroppedObjects3 = 3;
-
-
+	
 	int level = 1;
 	
-
+	SoundStream* music;
+	
 	const int maxFallingObjects = 50;
 	int fallingObjects0 = 0;
 	int fallingObjects1 = 0;
@@ -576,6 +581,11 @@ int kore(int argc, char** argv) {
 	Keyboard::the()->KeyDown = keyDown;
 	Keyboard::the()->KeyUp = keyUp;
 	Mouse::the()->Press = mousePress;
+	
+	Audio1::init();
+	Audio2::init();
+	music = new SoundStream("LeChat.ogg", true);
+	Audio1::play(music);
 
 	Kore::System::start();
 
