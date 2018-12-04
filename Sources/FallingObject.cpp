@@ -55,6 +55,8 @@ void FallingObject::update(float catX, float catY, bool activate)
 
 void FallingObject::render(Kore::Graphics2::Graphics2* g2, float cameraX, float cameraY, float width, float height)
 {
+	//if (position == nullptr) return;
+	
 	if (cameraX < position.x() + this->width && position.x() < cameraX + width
 		&& cameraY < position.y() && cameraY + height > position.y() + this->height)
 	{
