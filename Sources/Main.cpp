@@ -361,11 +361,37 @@ namespace {
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
+			
 			for (int i = 0; i < fallingObjects; ++i) {
-				fos0[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
-				if (fos0[i]->isDroped())
-				{
-					++droppedObjects;
+					if (level == 1 + 1) {
+						if (attack)
+						{
+						 fos0[i]->update(playerCenter.x(), playerCenter.y()+20, true);
+						}else fos0[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+						if (fos0[i]->isDroped())
+						{
+							++droppedObjects;
+						}
+					}
+					else if (level == 2 + 1) {
+						if (attack)
+						{
+							fos1[i]->update(playerCenter.x(), playerCenter.y() + 20, true);
+						}else fos1[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+						if (fos1[i]->isDroped())
+						{
+							++droppedObjects;
+						}
+					/*else if (level == 3 + 1) {
+						if (attack)
+						{
+						 fos2[i]->update(playerCenter.x(), playerCenter.y()+20, true);
+						}else fos2[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+						if (fos2[i]->isDroped())
+						{
+							++droppedObjects;
+						}
+					}*/
 				}
 			}
 			
@@ -471,20 +497,25 @@ int kore(int argc, char** argv) {
 	Kore::System::setCallback(update);
 	
 	loadNextLevel();
+
 	fos0 = new FallingObject*[maxFallingObjects];
 	fos0[1] = new FallingObject(225, 100, 168, "bottle_green.png"); //check
 	fos0[18] = new FallingObject(280, 100, 168, "books2.png"); //check
-	fos0[21] = new FallingObject(333, 100, 168, "books2.png"); //chandalier here
+	fos0[21] = new FallingObject(333, 100, 168, "candles.png"); //chandalier here
 	fos0[2] = new FallingObject(420, 100, 168, "glass_cup.png"); //chek
 	fos0[5] = new FallingObject(448, 100, 168, "mug.png"); //check
-	fos0[3] = new FallingObject(450, 149, 168, "bottle.png");
-	fos0[20] = new FallingObject(538, 82, 168, "books2.png"); //books 3
+	fos0[3] = new FallingObject(450, 149, 168, "bottle.png"); //check
+	fos0[20] = new FallingObject(538, 82, 168, "books3.png"); //check
 	fos0[0] = new FallingObject(552, 82, 168, "vase.png"); //check
-	fos0[4] = new FallingObject(587, 149, 168, "vase.png"); //change me
-	fos0[19] = new FallingObject(610, 83, 168, "books.png");
-	fos0[7] = new FallingObject(789, 149, 168, "vase.png");
+	fos0[4] = new FallingObject(587, 149, 168, "bottle_green.png"); //check
+	fos0[19] = new FallingObject(610, 83, 168, "books.png");//check
+	fos0[7] = new FallingObject(783, 141, 168, "book_red.png"); //check
+	fos0[23] = new FallingObject(776, 140, 168, "book_red.png"); //check
+	fos0[24] = new FallingObject(776, 117, 168, "book_brown.png"); //check
+	fos0[25] = new FallingObject(783, 118, 168, "book_brown.png"); //check
 	fos0[6] = new FallingObject(808, 100, 168, "mug2.png"); // check
-	fos0[8] = new FallingObject(884, 122, 168, "vase.png");
+	fos0[8] = new FallingObject(874, 100, 168, "walkytalky.png"); //chek
+	fos0[22] = new FallingObject(972, 120, 168, "duck_middle.png"); //chek
 
 	fos0[9] = new FallingObject(12, 305, 168*2, "vase.png");
 	fos0[10] = new FallingObject(278, 278, 168*2, "vase.png");
@@ -511,7 +542,7 @@ int kore(int argc, char** argv) {
 	fos2[10] = new FallingObject(514, 218, tileHeight*2, "duck_middle.png"); //
 	fos2[11] = new FallingObject(571, 218, tileHeight*2, "duck_small.png"); //
 	
-	fallingObjects = 22;
+	fallingObjects = 26;
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
 	playerWidth = cat_walk->getWidth();

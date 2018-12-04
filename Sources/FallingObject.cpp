@@ -34,8 +34,9 @@ void FallingObject::update(float catX, float catY, bool activate)
 	if (!activated && activate)
 	{
 		Kore::vec2 cat(catX, catY);
+		float catRadius = 10;
 		float dist = center.distance(cat);
-		if (dist <= radius)
+		if (dist <= radius+catRadius)
 		{
 			activated = true;
 		}
