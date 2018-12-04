@@ -468,26 +468,30 @@ int kore(int argc, char** argv) {
 	
 	loadNextLevel();
 	fos = new FallingObject*[maxFallingObjects];
-	fos[0] = new FallingObject(552, 82, 168, "vase.png");
-	fos[1] = new FallingObject(225, 102, 168, "bottle_green.png"); //set
-	fos[2] = new FallingObject(415, 103, 168, "glass_cup.png"); //set move to right
-	fos[3] = new FallingObject(440, 150, 168, "bottle_green.png");
-	fos[4] = new FallingObject(587, 149, 168, "vase.png");
-	fos[5] = new FallingObject(717, 120, 168, "vase_other.png");
-	fos[6] = new FallingObject(718, 144, 168, "vase_other.png");
+	fos[1] = new FallingObject(225, 100, 168, "bottle_green.png"); //check
+	fos[18] = new FallingObject(280, 100, 168, "books2.png"); //check
+	fos[21] = new FallingObject(333, 100, 168, "books2.png"); //chandalier here
+	fos[2] = new FallingObject(420, 100, 168, "glass_cup.png"); //chek
+	fos[5] = new FallingObject(448, 100, 168, "mug.png"); //check
+	fos[3] = new FallingObject(450, 149, 168, "bottle.png");
+	fos[20] = new FallingObject(538, 82, 168, "books2.png"); //books 3
+	fos[0] = new FallingObject(552, 82, 168, "vase.png"); //check
+	fos[4] = new FallingObject(587, 149, 168, "vase.png"); //change me
+	fos[19] = new FallingObject(610, 83, 168, "books.png");
 	fos[7] = new FallingObject(789, 149, 168, "vase.png");
+	fos[6] = new FallingObject(808, 100, 168, "mug2.png"); // check
 	fos[8] = new FallingObject(884, 122, 168, "vase.png");
 
 	fos[9] = new FallingObject(12, 305, 168*2, "vase.png");
 	fos[10] = new FallingObject(278, 278, 168*2, "vase.png");
 	fos[11] = new FallingObject(310, 279, 168*2, "glass_cup.png");
 	fos[12] = new FallingObject(436, 211, 168*2, "book_red.png");
-	fos[13] = new FallingObject(512, 310, 168*2, "vase.png");
-	fos[14] = new FallingObject(594, 307, 168*2, "vase.png");
+	fos[13] = new FallingObject(512, 310, 168*2, "books.png");
+	fos[14] = new FallingObject(594, 307, 168*2, "books2.png");
 	fos[15] = new FallingObject(605, 191, 168*2, "book_brown.png");
-	fos[16] = new FallingObject(687, 258, 168*2, "vase.png");
+	fos[16] = new FallingObject(687, 258, 168*2, "lamp.png");
 	fos[17] = new FallingObject(778, 304, 168*2, "vase.png");
-	fallingObjects = 18;
+	fallingObjects = 22;
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
 	playerWidth = cat_walk->getWidth();
