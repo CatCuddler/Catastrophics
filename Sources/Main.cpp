@@ -36,10 +36,10 @@ namespace {
 	int droppedObjects = 0;
 	const int maxDroppedObjects1 = 7;
 	const int maxDroppedObjects2 = 0;
-	const int maxDroppedObjects3 = 2;
+	const int maxDroppedObjects3 = 3;
 
 
-	int level = 1;
+	int level = 3;
 	
 
 	const int maxFallingObjects = 50;
@@ -335,7 +335,7 @@ namespace {
 			for (int i = 0; i < fallingObjects; ++i) {
 				if (level == 1 + 1) fos0[i]->render(g2, camX, camY, w * scale, h * scale);
 				if (level == 2 + 1) fos1[i]->render(g2, camX, camY, w * scale, h * scale);
-				//if (level == 3 + 1) fos2[i]->render(g2, camX, camY, w * scale, h * scale);
+				if (level == 3 + 1) fos2[i]->render(g2, camX, camY, w * scale, h * scale);
 			}
 			bool lastDir = lastDirection == 0;
 			if (prep)
@@ -496,10 +496,20 @@ int kore(int argc, char** argv) {
 	fos0[16] = new FallingObject(687, 258, 168*2, "lamp.png");
 	fos0[17] = new FallingObject(778, 304, 168*2, "vase.png");
 	
-	fos2 = new FallingObject*[maxFallingObjects];
-	fos2[0] = new FallingObject(431, 89, tileHeight*2, "duck_small.png"); //
-	fos2[1] = new FallingObject(343, 95, tileHeight*2, "duck_middle.png"); //
-	fos2[2] = new FallingObject(263, 54, tileHeight*2, "duck_small.png"); //
+	fos2 = new FallingObject*[maxDroppedObjects3];
+	fos2[0] = new FallingObject(431, 89, tileHeight, "duck_small.png"); //
+	fos2[1] = new FallingObject(343, 95, tileHeight, "duck_middle.png"); //
+	fos2[2] = new FallingObject(263, 54, tileHeight, "duck_small.png"); //
+	fos2[3] = new FallingObject(125, 52, tileHeight, "duck_small.png"); //
+	fos2[4] = new FallingObject(194, 54, tileHeight, "duck_middle.png"); //
+	fos2[5] = new FallingObject(264, 126, tileHeight, "duck_small.png"); //
+	
+	fos2[6] = new FallingObject(166, 236, tileHeight*2, "duck_small.png"); //
+	fos2[7] = new FallingObject(271, 218, tileHeight*2, "duck_middle.png"); //
+	fos2[8] = new FallingObject(334, 202, tileHeight*2, "duck_small.png"); //
+	fos2[9] = new FallingObject(77, 236, tileHeight*2, "duck_small.png"); //
+	fos2[10] = new FallingObject(514, 218, tileHeight*2, "duck_middle.png"); //
+	fos2[11] = new FallingObject(571, 218, tileHeight*2, "duck_small.png"); //
 	
 	fallingObjects = 22;
 	cat_walk = new Animation();
