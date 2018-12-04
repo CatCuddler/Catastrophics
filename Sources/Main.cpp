@@ -361,11 +361,37 @@ namespace {
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
 			drop(playerCenter.x(), playerCenter.y(), jump || falling);
+			
 			for (int i = 0; i < fallingObjects; ++i) {
-				fos0[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
-				if (fos0[i]->isDroped())
-				{
-					++droppedObjects;
+					if (level == 1 + 1) {
+						if (attack)
+						{
+						 fos0[i]->update(playerCenter.x(), playerCenter.y()+20, true);
+						}else fos0[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+						if (fos0[i]->isDroped())
+						{
+							++droppedObjects;
+						}
+					}
+					else if (level == 2 + 1) {
+						if (attack)
+						{
+							fos1[i]->update(playerCenter.x(), playerCenter.y() + 20, true);
+						}else fos1[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+						if (fos1[i]->isDroped())
+						{
+							++droppedObjects;
+						}
+					/*else if (level == 3 + 1) {
+						if (attack)
+						{
+						 fos2[i]->update(playerCenter.x(), playerCenter.y()+20, true);
+						}else fos2[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+						if (fos2[i]->isDroped())
+						{
+							++droppedObjects;
+						}
+					}*/
 				}
 			}
 			
@@ -489,7 +515,7 @@ int kore(int argc, char** argv) {
 	fos0[25] = new FallingObject(783, 118, 168, "book_brown.png"); //check
 	fos0[6] = new FallingObject(808, 100, 168, "mug2.png"); // check
 	fos0[8] = new FallingObject(874, 100, 168, "walkytalky.png"); //chek
-	fos0[22] = new FallingObject(972, 120, 168, "ducks_middle.png"); //chek
+	fos0[22] = new FallingObject(972, 120, 168, "duck_middle.png"); //chek
 
 	fos0[9] = new FallingObject(12, 305, 168*2, "vase.png");
 	fos0[10] = new FallingObject(278, 278, 168*2, "vase.png");
