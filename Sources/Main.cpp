@@ -336,9 +336,6 @@ namespace {
 			g2->drawImage(introImage, 0, 0);
 			g2->drawString("Press enter to start the game", 0, 0);
 		} else if (state == InGameState) {
-			
-			Audio1::play(music, Random::get(900, 1000) / 1000.f);
-			
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
@@ -585,10 +582,10 @@ int kore(int argc, char** argv) {
 	Keyboard::the()->KeyUp = keyUp;
 	Mouse::the()->Press = mousePress;
 	
-	//Audio1::init();
-	//Audio2::init();
-	//music = new SoundStream("loop.ogg", true);
-	//Audio1::play(music);
+	Audio1::init();
+	Audio2::init();
+	music = new SoundStream("LeChat.ogg", true);
+	Audio1::play(music);
 
 	Kore::System::start();
 
