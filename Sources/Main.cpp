@@ -470,17 +470,18 @@ int kore(int argc, char** argv) {
 	fos = new FallingObject*[maxFallingObjects];
 	fos[1] = new FallingObject(225, 100, 168, "bottle_green.png"); //check
 	fos[18] = new FallingObject(280, 100, 168, "books2.png"); //check
-	fos[21] = new FallingObject(333, 100, 168, "books2.png"); //chandalier here
+	fos[21] = new FallingObject(333, 100, 168, "candles.png"); //chandalier here
 	fos[2] = new FallingObject(420, 100, 168, "glass_cup.png"); //chek
 	fos[5] = new FallingObject(448, 100, 168, "mug.png"); //check
 	fos[3] = new FallingObject(450, 149, 168, "bottle.png");
-	fos[20] = new FallingObject(538, 82, 168, "books2.png"); //books 3
+	fos[20] = new FallingObject(538, 82, 168, "books3.png"); //check
 	fos[0] = new FallingObject(552, 82, 168, "vase.png"); //check
-	fos[4] = new FallingObject(587, 149, 168, "vase.png"); //change me
-	fos[19] = new FallingObject(610, 83, 168, "books.png");
-	fos[7] = new FallingObject(789, 149, 168, "vase.png");
+	fos[4] = new FallingObject(587, 149, 168, "vase.png"); //change me !!!
+	fos[19] = new FallingObject(610, 83, 168, "books.png");//check
+	fos[7] = new FallingObject(784, 140, 168, "vase.png"); //change me !!!
 	fos[6] = new FallingObject(808, 100, 168, "mug2.png"); // check
-	fos[8] = new FallingObject(884, 122, 168, "vase.png");
+	fos[8] = new FallingObject(874, 100, 168, "walkytalky.png"); //chek
+
 
 	fos[9] = new FallingObject(12, 305, 168*2, "vase.png");
 	fos[10] = new FallingObject(278, 278, 168*2, "vase.png");
