@@ -333,7 +333,9 @@ namespace {
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
 			for (int i = 0; i < fallingObjects; ++i) {
-				fos0[i]->render(g2, camX, camY, w * scale, h * scale);
+				if (level == 1 + 1) fos0[i]->render(g2, camX, camY, w * scale, h * scale);
+				if (level == 2 + 1) fos1[i]->render(g2, camX, camY, w * scale, h * scale);
+				//if (level == 3 + 1) fos2[i]->render(g2, camX, camY, w * scale, h * scale);
 			}
 			bool lastDir = lastDirection == 0;
 			if (prep)
@@ -499,6 +501,10 @@ int kore(int argc, char** argv) {
 	fos0[16] = new FallingObject(687, 258, 168*2, "lamp.png");
 	fos0[17] = new FallingObject(778, 304, 168*2, "vase.png");
 	
+	fos2 = new FallingObject*[maxFallingObjects];
+	fos2[0] = new FallingObject(431, 89, tileHeight*2, "duck_small.png"); //
+	fos2[1] = new FallingObject(343, 95, tileHeight*2, "duck_middle.png"); //
+	fos2[2] = new FallingObject(263, 54, tileHeight*2, "duck_small.png"); //
 	
 	fallingObjects = 26;
 	cat_walk = new Animation();
