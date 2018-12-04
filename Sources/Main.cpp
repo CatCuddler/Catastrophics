@@ -342,6 +342,7 @@ namespace {
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
+
 			if (level == 1 + 1) {
 				for (int i = 0; i < fallingObjects0; ++i) fos0[i]->render(g2, camX, camY, w * scale, h * scale);
 			}
@@ -351,6 +352,7 @@ namespace {
 			if (level == 3 + 1) {
 				for (int i = 0; i < fallingObjects1; ++i) fos2[i]->render(g2, camX, camY, w * scale, h * scale);
 			}
+
 			
 			bool lastDir = lastDirection == 0;
 			if (prep) {
