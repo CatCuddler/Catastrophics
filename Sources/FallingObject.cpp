@@ -3,9 +3,9 @@
 FallingObject::FallingObject(float x, float y, float floorHeight, const char* texName)
 {
 	Kore::Graphics4::Texture* tex = new Kore::Graphics4::Texture(texName);
-	this->position = Kore::vec2(x, y);
 	this->width = tex->width;
 	this->height = tex->height;
+	this->position = Kore::vec2(x, y * 1.12f - height);
 	this->tex = tex;
 	this->activated = false;
 	this->frameCount = 0;
@@ -64,4 +64,9 @@ void FallingObject::render(Kore::Graphics2::Graphics2* g2, float cameraX, float 
 		g2->drawScaledSubImage(tex, 0, 0, this->width, this->height, position.x() - cameraX - this->width/2, position.y() - cameraY, this->width, this->height);
 		g2->transformation = Kore::mat3::Identity();
 	}
+}
+
+bool FallingObject::isDroped()
+{
+	return frameCount >= maxFrameCount;
 }

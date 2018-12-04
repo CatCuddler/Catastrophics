@@ -6,12 +6,14 @@
 #include <Kore/System.h>
 #include <Kore/Log.h>
 #include <Kore/Graphics1/Color.h>
-
+#include <Kore/Input/Mouse.h>
 #include "Tileset.h"
 #include "Animation.h"
 #include "FallingObject.h"
 
 using namespace Kore;
+
+
 
 namespace {
 	const int scale = 4;
@@ -32,18 +34,20 @@ namespace {
 	float startHeight = -1;
 
 	int droppedObjects = 0;
-	const int maxDroppedObjects1 = 2;
+	const int maxDroppedObjects1 = 7;
 	const int maxDroppedObjects2 = 0;
 	const int maxDroppedObjects3 = 2;
 
+
 	int level = 1;
 	
+
+	const int maxFallingObjects = 50;
+	int fallingObjects = 0;
+	FallingObject** fos;
 	Graphics4::Texture* gameOverImage;
 	Graphics4::Texture* introImage;
 	
-	const int fallingObjects = 50;
-	//FallingObject* objects[fallingObjects];
-	FallingObject* vase;
 	Graphics2::Graphics2* g2;
 	
 	Animation* cat_walk;
@@ -71,7 +75,7 @@ namespace {
 	const char* const jumpText = "Key Up: jump on the table";
 	const char* const loadLevelText = "Key Up: load next level";
 	const char* const cannotLoadNextLevel = "You did not sacrificed enough objects.";
-	
+
 	enum GameState {
 		TitleState, InGameState, GameOverState
 	};
@@ -270,6 +274,7 @@ namespace {
 		cat_walk->update(playerCenter);
 		cat_jump->update(playerCenter);
 		cat_attack->update(playerCenter);
+		
 	}
 	
 	void moveGuy() {
@@ -325,7 +330,9 @@ namespace {
 			//camX = playerPosition.x();
 			//camY = playerPosition.y();
 			drawTiles(g2, camX, camY);
-			vase->render(g2, camX, camY, w * scale, h * scale);
+			for (int i = 0; i < fallingObjects; ++i) {
+				fos[i]->render(g2, camX, camY, w * scale, h * scale);
+			}
 			bool lastDir = lastDirection == 0;
 			if (prep)
 			{
@@ -349,11 +356,16 @@ namespace {
 			//guy->render(g2);
 			
 			animateSpider(playerCenter.x(), playerCenter.y());
-
-			droppedObjects += drop(playerCenter.x(), playerCenter.y(), jump || falling);
-			vase->update(playerCenter.x(), playerCenter.y(), jump || falling);
+			drop(playerCenter.x(), playerCenter.y(), jump || falling);
+			for (int i = 0; i < fallingObjects; ++i) {
+				fos[i]->update(playerCenter.x(), playerCenter.y(), jump || falling);
+				if (fos[i]->isDroped())
+				{
+					++droppedObjects;
+				}
+			}
 			
-			if (level == 2) drawGUI();
+			if (level == 1) drawGUI();
 		} else if (state == GameOverState) {
 			log(LogLevel::Info, "Add game over screen");
 			g2->drawImage(gameOverImage, 0, 0);
@@ -373,6 +385,12 @@ namespace {
 			cat_walk->status == Animation::Status::WalkingDownRight ||
 			cat_walk->status == Animation::Status::WalkingUpLeft ||
 			cat_walk->status == Animation::Status::WalkingUpRight;
+	}
+
+	void mousePress(int windowId, int button, int x, int y) {
+		int posX = camX + x;
+		int posY = camY + y;
+		log(LogLevel::Info, "x: %i , y: %i", posX , posY);
 	}
 
 	void keyDown(KeyCode code) {
@@ -449,9 +467,31 @@ int kore(int argc, char** argv) {
 	Kore::System::setCallback(update);
 	
 	loadNextLevel();
-	
-	vase = new FallingObject(100, 100, 168, "vase.png");
+	fos = new FallingObject*[maxFallingObjects];
+	fos[1] = new FallingObject(225, 100, 168, "bottle_green.png"); //check
+	fos[18] = new FallingObject(280, 100, 168, "books2.png"); //check
+	fos[21] = new FallingObject(333, 100, 168, "books2.png"); //chandalier here
+	fos[2] = new FallingObject(420, 100, 168, "glass_cup.png"); //chek
+	fos[5] = new FallingObject(448, 100, 168, "mug.png"); //check
+	fos[3] = new FallingObject(450, 149, 168, "bottle.png");
+	fos[20] = new FallingObject(538, 82, 168, "books2.png"); //books 3
+	fos[0] = new FallingObject(552, 82, 168, "vase.png"); //check
+	fos[4] = new FallingObject(587, 149, 168, "vase.png"); //change me
+	fos[19] = new FallingObject(610, 83, 168, "books.png");
+	fos[7] = new FallingObject(789, 149, 168, "vase.png");
+	fos[6] = new FallingObject(808, 100, 168, "mug2.png"); // check
+	fos[8] = new FallingObject(884, 122, 168, "vase.png");
 
+	fos[9] = new FallingObject(12, 305, 168*2, "vase.png");
+	fos[10] = new FallingObject(278, 278, 168*2, "vase.png");
+	fos[11] = new FallingObject(310, 279, 168*2, "glass_cup.png");
+	fos[12] = new FallingObject(436, 211, 168*2, "book_red.png");
+	fos[13] = new FallingObject(512, 310, 168*2, "books.png");
+	fos[14] = new FallingObject(594, 307, 168*2, "books2.png");
+	fos[15] = new FallingObject(605, 191, 168*2, "book_brown.png");
+	fos[16] = new FallingObject(687, 258, 168*2, "lamp.png");
+	fos[17] = new FallingObject(778, 304, 168*2, "vase.png");
+	fallingObjects = 22;
 	cat_walk = new Animation();
 	cat_walk->init("Tiles/cat_walking_anim.png", 5, Animation::AnimationTyp::Walking);
 	playerWidth = cat_walk->getWidth();
@@ -496,7 +536,7 @@ int kore(int argc, char** argv) {
 	
 	Keyboard::the()->KeyDown = keyDown;
 	Keyboard::the()->KeyUp = keyUp;
-		
+	Mouse::the()->Press = mousePress;
 
 	Kore::System::start();
 

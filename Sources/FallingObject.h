@@ -22,5 +22,5 @@ struct FallingObject{
 	FallingObject(float x, float y, float with, float height, float floorHeight, Kore::Graphics4::Texture* tex);
 	void update(float catX, float catY, bool activate);
 	void render(Kore::Graphics2::Graphics2* render, float cameraX, float cameraY, float width, float height);
-
+	bool isDroped();
 };
